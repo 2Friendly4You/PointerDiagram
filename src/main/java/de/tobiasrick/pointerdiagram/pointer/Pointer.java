@@ -131,5 +131,6 @@ public abstract class Pointer {
         gc.strokeLine(0, 0, len, 0);
         gc.fillPolygon(new double[]{len, len - ARR_SIZE, len - ARR_SIZE, len}, new double[]{0, -ARR_SIZE, ARR_SIZE, 0},
                 4);
+        gc.setTransform(new Affine(Transform.rotate(0,0,0)));
     }
 }

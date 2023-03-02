@@ -3,7 +3,10 @@ package de.tobiasrick.pointerdiagram.canvas;
 import de.tobiasrick.pointerdiagram.I18N;
 import de.tobiasrick.pointerdiagram.pointer.BasePointer;
 import de.tobiasrick.pointerdiagram.pointer.ExtensionPointer;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -26,16 +29,28 @@ import java.util.List;
 public class PointerCanvas extends Canvas {
     private final List<DrawableShape> shapes = new ArrayList<>();
 
-    public PointerCanvas(){
+    public PointerCanvas() {
         super(2000, 2000);
 
         // set fill for rectangle
-        BasePointer basePointer = new BasePointer(this.getGraphicsContext2D(), 10, 10, 50, 10);
-        basePointer.addExtensionPointer(new ExtensionPointer(this.getGraphicsContext2D(), 50, 10, 50, 40, Color.BLUE, Color.BLUE));
+        BasePointer basePointer = new BasePointer(this.getGraphicsContext2D(), 10, 10, 1200, 10);
+        basePointer.addExtensionPointer(new ExtensionPointer(this.getGraphicsContext2D(), 50, 10, 50, 400, Color.BLUE, Color.BLUE));
         basePointer.addExtensionPointer(new ExtensionPointer(this.getGraphicsContext2D(), 10, 10, 50, 40, Color.RED, Color.RED));
-        addShape(new DrawableShape(basePointer,Color.BLACK, Color.BLUE));
+        addShape(new DrawableShape(basePointer, Color.BLACK, Color.BLUE));
 
-        resizeCanvasToContent(this);
+
+        //saveImage(Start.stage, this, "png");
+    }
+
+    public static double clamp( double value, double min, double max) {
+
+        if( Double.compare(value, min) < 0)
+            return min;
+
+        if( Double.compare(value, max) > 0)
+            return max;
+
+        return value;
     }
 
     /**
@@ -79,10 +94,23 @@ public class PointerCanvas extends Canvas {
     }
 
     /**
-     * Resize the canvas to its contens
-     * @param canvas The canvas that sould be resized
+     * creates a file Chooser Dialog and then proceeds to save the canvas content in the given file
+     *
+     * @param primaryStage The stage the file chooser should belong to
+     * @param canvas       The canvas to draw to the file
+     * @param type         The image type - supported types: png
      */
-    public static void resizeCanvasToContent(Canvas canvas) {
+    public static void saveImage(Stage primaryStage, Canvas canvas, String type){
+        // create file chooser
+        FileChooser saveFile = new FileChooser();
+        saveFile.titleProperty().bind(I18N.createStringBinding("window.title.saveCanvasToPng"));
+        // add an extension filter, that ensures that the file is a png
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("PNG Files", "*.png");
+        saveFile.getExtensionFilters().add(extensionFilter);
+
+        // show the dialog
+        File file = saveFile.showSaveDialog(primaryStage);
+
         // Take a snapshot of the canvas
         SnapshotParameters params = new SnapshotParameters();
         params.setFill(Color.TRANSPARENT); // ensure transparency is preserved
@@ -119,33 +147,21 @@ public class PointerCanvas extends Canvas {
             }
         }
 
-        // set canvas to the max size
-        canvas.setWidth(maxX+50);
-        canvas.setHeight(maxY+50);
-    }
+        // Define the rectangular area to be cut out
+        double x = minX - 20;    // x-coordinate of the rectangle
+        double y = minY - 20;    // y-coordinate of the rectangle
+        double w = maxX - minX + 40;    // width of the rectangle
+        double h = maxY - minY + 40;    // height of the rectangle
 
-    /**
-     * creates a file Chooser Dialog and then proceeds to save the canvas in the given file
-     *
-     * @param primaryStage The stage the file chooser should belong to
-     * @param canvas The canvas to draw to the file
-     * @param type The image type - supported types: png
-     */
-    public static void saveImage(Stage primaryStage, Canvas canvas, String type){
-        // create file chooser
-        FileChooser saveFile = new FileChooser();
-        saveFile.titleProperty().bind(I18N.createStringBinding("window.title.saveCanvasToPng"));
-        // add an extension filter, that ensures that the file is a png
-        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("PNG Files", "*.png");
-        saveFile.getExtensionFilters().add(extensionFilter);
+        if (x < 0) x = 0;
+        if (y < 0) y = 0;
+        if (w > canvas.getWidth()) w = canvas.getWidth();
+        if (h > canvas.getHeight()) h = canvas.getHeight();
 
-        // show the dialog
-        File file = saveFile.showSaveDialog(primaryStage);
-
-        // Take a snapshot of the canvas
-        SnapshotParameters params = new SnapshotParameters();
-        params.setFill(Color.TRANSPARENT); // ensure transparency is preserved
-        WritableImage snapshot = canvas.snapshot(params, null);
+        params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT);    // make transparent pixels non-opaque
+        params.setViewport(new Rectangle2D(x, y, w, h));    // set the region to be captured
+        snapshot = canvas.snapshot(params, null);
 
         // write canvas to the file
         try {
