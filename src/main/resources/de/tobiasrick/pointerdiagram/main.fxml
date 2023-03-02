@@ -42,7 +42,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<?import de.tobiasrick.pointerdiagram.PointerCanvas?>
+<?import de.tobiasrick.pointerdiagram.canvas.PointerCanvas?>
 <VBox fx:id="vBox" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.tobiasrick.pointerdiagram.MainWindow">
   <MenuBar VBox.vgrow="NEVER">
     <Menu mnemonicParsing="false" text="File">

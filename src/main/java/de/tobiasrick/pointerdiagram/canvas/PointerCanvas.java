@@ -1,11 +1,11 @@
-package de.tobiasrick.pointerdiagram;
+package de.tobiasrick.pointerdiagram.canvas;
 
+import de.tobiasrick.pointerdiagram.I18N;
+import de.tobiasrick.pointerdiagram.pointers.Pointer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -17,6 +17,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A class for the canvas that can draw pointers
+ *
+ * @author Tobias Rick
+ */
 public class PointerCanvas extends Canvas {
     private final List<DrawableShape> shapes = new ArrayList<>();
 
@@ -24,28 +29,44 @@ public class PointerCanvas extends Canvas {
         super(2000, 2000);
 
         // set fill for rectangle
-        addShape(new DrawableShape(new Rectangle(10, 10, 700, 700), Color.BLACK, Color.RED));
-        addShape(new DrawableShape(new Rectangle(20, 20, 20, 20), Color.GREEN, Color.BLACK));
+        addShape(new DrawableShape(new Pointer(this.getGraphicsContext2D(), 10, 10, 50, 10), Color.BLACK, Color.BLUE));
+        addShape(new DrawableShape(new Pointer(this.getGraphicsContext2D(), 50, 10, 50, 40, Color.BLUE, Color.BLUE)));
 
         resizeCanvasToContent(this);
     }
 
+    /**
+     * adds a shape to the canvas
+     *
+     * @param shape the shape, that is added
+     */
     public void addShape(DrawableShape shape) {
         shapes.add(shape);
         drawShapes();
     }
 
+    /**
+     * removes a shape from the canvas
+     *
+     * @param shape the shape, that will be removed
+     */
     public void removeShape(DrawableShape shape) {
         shapes.remove(shape);
         drawShapes();
     }
 
+    /**
+     * clear all shapes and reset canvas
+     */
     public void clearShapes() {
         shapes.clear();
         GraphicsContext gc = getGraphicsContext2D();
         gc.clearRect(0, 0, getWidth(), getHeight());
     }
 
+    /**
+     * draw all shapes to the canvas
+     */
     private void drawShapes() {
         GraphicsContext gc = getGraphicsContext2D();
         gc.clearRect(0, 0, getWidth(), getHeight());
@@ -95,6 +116,7 @@ public class PointerCanvas extends Canvas {
             }
         }
 
+        // set canvas to the max size
         canvas.setWidth(maxX+50);
         canvas.setHeight(maxY+50);
     }
@@ -107,11 +129,14 @@ public class PointerCanvas extends Canvas {
      * @param type The image type - supported types: png
      */
     public static void saveImage(Stage primaryStage, Canvas canvas, String type){
+        // create file chooser
         FileChooser saveFile = new FileChooser();
         saveFile.titleProperty().bind(I18N.createStringBinding("window.title.saveCanvasToPng"));
+        // add an extension filter, that ensures that the file is a png
         FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("PNG Files", "*.png");
         saveFile.getExtensionFilters().add(extensionFilter);
 
+        // show the dialog
         File file = saveFile.showSaveDialog(primaryStage);
 
         // Take a snapshot of the canvas
@@ -119,13 +144,11 @@ public class PointerCanvas extends Canvas {
         params.setFill(Color.TRANSPARENT); // ensure transparency is preserved
         WritableImage snapshot = canvas.snapshot(params, null);
 
+        // write canvas to the file
         try {
             ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), type, file);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public record DrawableShape(Shape shape, Color strokeColor, Color fillColor) {
     }
 }

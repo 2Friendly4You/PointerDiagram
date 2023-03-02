@@ -9,7 +9,10 @@ module de.tobiasrick.pointerdiagram {
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
+    requires java.prefs;
 
     opens de.tobiasrick.pointerdiagram to javafx.fxml;
     exports de.tobiasrick.pointerdiagram;
+    exports de.tobiasrick.pointerdiagram.canvas;
+    opens de.tobiasrick.pointerdiagram.canvas to javafx.fxml;
 }
