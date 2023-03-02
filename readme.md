@@ -1,6 +1,6 @@
 # Pointer diagram
 
-Pointer diagram is a javafx program, that can draw pointer diagrams for computers.
+Pointer diagram is a javafx program that can be used to draw pointer diagrams for the computer.
 
 ## Installation
 
