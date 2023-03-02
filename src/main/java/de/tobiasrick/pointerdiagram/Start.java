@@ -2,6 +2,7 @@ package de.tobiasrick.pointerdiagram;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -54,6 +55,19 @@ public class Start extends Application {
 
         // show window
         stage.show();
+
+
+        try {
+            FXMLLoader fxmlLoader2 = new FXMLLoader(Start.class.getResource("BasePointerAdder.fxml"));
+            Parent root1 = fxmlLoader2.load();
+            Stage stage2 = new Stage();
+            stage2.setTitle("My New Stage Title");
+            stage2.setScene(new Scene(root1));
+            stage2.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {

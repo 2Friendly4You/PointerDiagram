@@ -1,10 +1,15 @@
 package de.tobiasrick.pointerdiagram;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Locale;
 
 public class MainWindow {
@@ -90,5 +95,42 @@ public class MainWindow {
     private void switchLanguage(Locale locale) {
         I18N.setLocale(locale);
         Start.prefs.put("language", locale.toString());
+    }
+
+    @FXML
+    void addBasePointer(ActionEvent event) {
+
+    }
+
+    @FXML
+    void addExtensionPointer(ActionEvent event) {
+
+    }
+
+    @FXML
+    void deletePointers(ActionEvent event) {
+
+    }
+
+    @FXML
+    void openAuthorLink(ActionEvent event) {
+        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+            try {
+                Desktop.getDesktop().browse(new URI("https://tobiasrick.de"));
+            } catch (IOException | URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    @FXML
+    void openGithubLink(ActionEvent event) {
+        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+            try {
+                Desktop.getDesktop().browse(new URI("https://github.com/2Friendly4You/PointerDiagram/"));
+            } catch (IOException | URISyntaxException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

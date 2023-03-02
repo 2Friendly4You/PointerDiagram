@@ -32,9 +32,17 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.scene.control.*?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+
 <?import de.tobiasrick.pointerdiagram.canvas.PointerCanvas?>
 <VBox fx:id="vBox" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.tobiasrick.pointerdiagram.MainWindow">
   <MenuBar VBox.vgrow="NEVER">
@@ -76,7 +84,9 @@
   </MenuBar>
    <ToolBar nodeOrientation="LEFT_TO_RIGHT">
      <items>
-       <Button mnemonicParsing="false" text="Button" />
+       <Button mnemonicParsing="false" text="BasePointer" />
+         <Button mnemonicParsing="false" text="ExtensionPointer" />
+         <Button mnemonicParsing="false" text="Remove Pointers" />
      </items>
    </ToolBar>
    <AnchorPane fx:id="anchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="183.0" prefWidth="139.0" VBox.vgrow="ALWAYS">

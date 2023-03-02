@@ -3,8 +3,6 @@ package de.tobiasrick.pointerdiagram.canvas;
 import de.tobiasrick.pointerdiagram.I18N;
 import de.tobiasrick.pointerdiagram.pointer.BasePointer;
 import de.tobiasrick.pointerdiagram.pointer.ExtensionPointer;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
