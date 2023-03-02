@@ -1,7 +1,8 @@
 package de.tobiasrick.pointerdiagram.canvas;
 
 import de.tobiasrick.pointerdiagram.I18N;
-import de.tobiasrick.pointerdiagram.pointers.Pointer;
+import de.tobiasrick.pointerdiagram.pointer.BasePointer;
+import de.tobiasrick.pointerdiagram.pointer.ExtensionPointer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
@@ -29,8 +30,10 @@ public class PointerCanvas extends Canvas {
         super(2000, 2000);
 
         // set fill for rectangle
-        addShape(new DrawableShape(new Pointer(this.getGraphicsContext2D(), 10, 10, 50, 10), Color.BLACK, Color.BLUE));
-        addShape(new DrawableShape(new Pointer(this.getGraphicsContext2D(), 50, 10, 50, 40, Color.BLUE, Color.BLUE)));
+        BasePointer basePointer = new BasePointer(this.getGraphicsContext2D(), 10, 10, 50, 10);
+        basePointer.addExtensionPointer(new ExtensionPointer(this.getGraphicsContext2D(), 50, 10, 50, 40, Color.BLUE, Color.BLUE));
+        basePointer.addExtensionPointer(new ExtensionPointer(this.getGraphicsContext2D(), 10, 10, 50, 40, Color.RED, Color.RED));
+        addShape(new DrawableShape(basePointer,Color.BLACK, Color.BLUE));
 
         resizeCanvasToContent(this);
     }

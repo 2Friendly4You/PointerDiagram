@@ -1,4 +1,4 @@
-package de.tobiasrick.pointerdiagram.pointers;
+package de.tobiasrick.pointerdiagram.pointer;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -10,7 +10,7 @@ import javafx.scene.transform.Transform;
  *
  * @author Tobias Rick
  */
-public class Pointer {
+public abstract class Pointer {
 
     private GraphicsContext gc;
     private int x1;
@@ -54,6 +54,62 @@ public class Pointer {
 
     public void setLineWidth(int lineWidth) {
         this.lineWidth = lineWidth;
+    }
+
+    public GraphicsContext getGc() {
+        return gc;
+    }
+
+    public void setGc(GraphicsContext gc) {
+        this.gc = gc;
+    }
+
+    public int getX1() {
+        return x1;
+    }
+
+    public void setX1(int x1) {
+        this.x1 = x1;
+    }
+
+    public int getY1() {
+        return y1;
+    }
+
+    public void setY1(int y1) {
+        this.y1 = y1;
+    }
+
+    public int getX2() {
+        return x2;
+    }
+
+    public void setX2(int x2) {
+        this.x2 = x2;
+    }
+
+    public int getY2() {
+        return y2;
+    }
+
+    public void setY2(int y2) {
+        this.y2 = y2;
+    }
+
+    public Color getStrokeColor() {
+        return strokeColor;
+    }
+
+    public void setStrokeColor(Color strokeColor) {
+        this.strokeColor = strokeColor;
+    }
+
+    public Color getFillColor() {
+        return fillColor;
+    }
+
+    public void setFillColor(Color fillColor) {
+        this.fillColor = fillColor;
     }
 
     /**

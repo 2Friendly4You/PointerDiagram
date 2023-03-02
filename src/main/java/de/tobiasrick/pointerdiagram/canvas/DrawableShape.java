@@ -1,6 +1,6 @@
 package de.tobiasrick.pointerdiagram.canvas;
 
-import de.tobiasrick.pointerdiagram.pointers.Pointer;
+import de.tobiasrick.pointerdiagram.pointer.Pointer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
