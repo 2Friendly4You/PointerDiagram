@@ -2,9 +2,14 @@ package de.tobiasrick.pointerdiagram;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;
@@ -30,6 +35,8 @@ public class MainWindow {
     void quitButtonClicked() {
         Start.stage.close();
     }
+
+    public static Stage addBasePointerWindow;
 
     /**
      * initializes the window (custom properties)
@@ -131,6 +138,25 @@ public class MainWindow {
             } catch (IOException | URISyntaxException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    @FXML
+    void addBasePointerButtonClicked(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader2 = new FXMLLoader(Start.class.getResource("BasePointerAdder.fxml"));
+            Parent root1 = fxmlLoader2.load();
+            addBasePointerWindow = new Stage();
+            addBasePointerWindow.setTitle("Add Base Pointer");
+            addBasePointerWindow.setScene(new Scene(root1));
+            addBasePointerWindow.setResizable(false);
+            addBasePointerWindow.centerOnScreen();
+            addBasePointerWindow.initOwner(Start.stage);
+            addBasePointerWindow.initModality(Modality.WINDOW_MODAL);
+            addBasePointerWindow.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

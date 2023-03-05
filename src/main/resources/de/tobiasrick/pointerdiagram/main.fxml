@@ -79,12 +79,13 @@
       <MenuItem mnemonicParsing="false" text="Unselect All" />
     </Menu>
     <Menu mnemonicParsing="false" text="Help">
-      <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+         <MenuItem mnemonicParsing="false" onAction="#openAuthorLink" text="About Author" />
+         <MenuItem mnemonicParsing="false" onAction="#openGithubLink" text="Github Project" />
     </Menu>
   </MenuBar>
    <ToolBar nodeOrientation="LEFT_TO_RIGHT">
      <items>
-       <Button mnemonicParsing="false" text="BasePointer" />
+       <Button mnemonicParsing="false" onAction="#addBasePointerButtonClicked" text="BasePointer" />
          <Button mnemonicParsing="false" text="ExtensionPointer" />
          <Button mnemonicParsing="false" text="Remove Pointers" />
      </items>
