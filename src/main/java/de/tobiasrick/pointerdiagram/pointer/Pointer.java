@@ -12,15 +12,15 @@ import javafx.scene.transform.Transform;
  */
 public abstract class Pointer {
 
-    private GraphicsContext gc;
+    private final GraphicsContext gc;
     private double x1;
     private double y1;
     private double x2;
     private double y2;
     private Color strokeColor;
     private Color fillColor;
-    private int ARR_SIZE = 8;
-    private int lineWidth = 1;
+    private final int ARR_SIZE = 8;
+    private final int lineWidth = 1;
     private double length;
 
     public Pointer(GraphicsContext gc, double x1, double y1, double x2, double y2){
@@ -52,24 +52,12 @@ public abstract class Pointer {
         return ARR_SIZE;
     }
 
-    public void setARR_SIZE(int ARR_SIZE) {
-        this.ARR_SIZE = ARR_SIZE;
-    }
-
     public int getLineWidth() {
         return lineWidth;
     }
 
-    public void setLineWidth(int lineWidth) {
-        this.lineWidth = lineWidth;
-    }
-
     public GraphicsContext getGc() {
         return gc;
-    }
-
-    public void setGc(GraphicsContext gc) {
-        this.gc = gc;
     }
 
     public double getX1() {
@@ -92,32 +80,16 @@ public abstract class Pointer {
         return x2;
     }
 
-    public void setX2(double x2) {
-        this.x2 = x2;
-    }
-
     public double getY2() {
         return y2;
-    }
-
-    public void setY2(int y2) {
-        this.y2 = y2;
     }
 
     public Color getStrokeColor() {
         return strokeColor;
     }
 
-    public void setStrokeColor(Color strokeColor) {
-        this.strokeColor = strokeColor;
-    }
-
     public Color getFillColor() {
         return fillColor;
-    }
-
-    public void setFillColor(Color fillColor) {
-        this.fillColor = fillColor;
     }
 
     /**

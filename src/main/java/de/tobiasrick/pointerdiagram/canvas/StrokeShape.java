@@ -17,8 +17,13 @@ public class StrokeShape {
             gc.fillRect(rec.getX(), rec.getY(), rec.getWidth(), rec.getHeight());
         } else {
             assert shape != null;
-            if(shape.getPointer() != null){
+            if (shape.getPointer() != null) {
                 shape.getPointer().drawArrow();
+            } else if(shape.getTextShape() != null){
+                gc.setStroke(shape.getTextShape().getColor());
+                gc.setFill(shape.getTextShape().getColor());
+                gc.setFont(shape.getTextShape().getFont());
+                gc.fillText(shape.getTextShape().getText(), shape.getTextShape().getX(), shape.getTextShape().getY());
             }
         }
     }

@@ -2,8 +2,6 @@ package de.tobiasrick.pointerdiagram;
 
 import de.tobiasrick.pointerdiagram.canvas.AddToCanvas;
 import de.tobiasrick.pointerdiagram.canvas.PointerCanvas;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -20,21 +18,20 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Locale;
-import java.util.Objects;
 
 import static de.tobiasrick.pointerdiagram.Start.prefs;
 
 public class MainWindow {
 
+    @FXML
+    public ToggleGroup languageToggleGroup;
     @FXML
     private MenuItem buttonSwitchToEnglish;
 
@@ -53,7 +50,7 @@ public class MainWindow {
     @FXML
     private PointerCanvas canvas;
 
-    public static Stage addPointerWindow;
+    public static Stage addWindow;
 
     /**
      * initializes the window (custom properties)
@@ -133,17 +130,17 @@ public class MainWindow {
     }
 
     @FXML
-    void removePointersButtonClicked(ActionEvent event) {
+    void removePointersButtonClicked() {
         canvas.clearShapes();
     }
 
     @FXML
-    void exportAsPNGButtonClicked(ActionEvent event) {
+    void exportAsPNGButtonClicked() {
         PointerCanvas.saveImage(Start.stage, canvas, "png");
     }
 
     @FXML
-    void copyToClipboardButtonClicked(ActionEvent event) {
+    void copyToClipboardButtonClicked() {
         Color color = showColorPickerPopup("Please pick the background color.");
         if(color != null){
             PointerCanvas.copyImageToClipboard(canvas, color);
@@ -204,7 +201,7 @@ public class MainWindow {
 
 
     @FXML
-    void openAuthorLink(ActionEvent event) {
+    void openAuthorLink() {
         if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
             try {
                 Desktop.getDesktop().browse(new URI("https://tobiasrick.de"));
@@ -215,7 +212,7 @@ public class MainWindow {
     }
 
     @FXML
-    void openGithubLink(ActionEvent event) {
+    void openGithubLink() {
         if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
             try {
                 Desktop.getDesktop().browse(new URI("https://github.com/2Friendly4You/PointerDiagram/"));
@@ -226,18 +223,18 @@ public class MainWindow {
     }
 
     @FXML
-    void addBasePointerButtonClicked(ActionEvent event) {
+    void addBasePointerButtonClicked() {
         try {
             FXMLLoader fxmlLoader2 = new FXMLLoader(Start.class.getResource("BasePointerAdder.fxml"));
             Parent root1 = fxmlLoader2.load();
-            addPointerWindow = new Stage();
-            addPointerWindow.setTitle("Add Base Pointer");
-            addPointerWindow.setScene(new Scene(root1));
-            addPointerWindow.setResizable(false);
-            addPointerWindow.centerOnScreen();
-            addPointerWindow.initOwner(Start.stage);
-            addPointerWindow.initModality(Modality.WINDOW_MODAL);
-            addPointerWindow.show();
+            addWindow = new Stage();
+            addWindow.setTitle("Add Base Pointer");
+            addWindow.setScene(new Scene(root1));
+            addWindow.setResizable(false);
+            addWindow.centerOnScreen();
+            addWindow.initOwner(Start.stage);
+            addWindow.initModality(Modality.WINDOW_MODAL);
+            addWindow.show();
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -245,23 +242,42 @@ public class MainWindow {
     }
 
     @FXML
-    void addExtensionPointerButtonClicked(ActionEvent event) {
+    void addExtensionPointerButtonClicked() {
         if(canvas.basePointerExists()){
             try {
                 FXMLLoader fxmlLoader2 = new FXMLLoader(Start.class.getResource("ExtensionPointerAdder.fxml"));
                 Parent root1 = fxmlLoader2.load();
-                addPointerWindow = new Stage();
-                addPointerWindow.setTitle("Add Extension Pointer");
-                addPointerWindow.setScene(new Scene(root1));
-                addPointerWindow.setResizable(false);
-                addPointerWindow.centerOnScreen();
-                addPointerWindow.initOwner(Start.stage);
-                addPointerWindow.initModality(Modality.WINDOW_MODAL);
-                addPointerWindow.show();
+                addWindow = new Stage();
+                addWindow.setTitle("Add Extension Pointer");
+                addWindow.setScene(new Scene(root1));
+                addWindow.setResizable(false);
+                addWindow.centerOnScreen();
+                addWindow.initOwner(Start.stage);
+                addWindow.initModality(Modality.WINDOW_MODAL);
+                addWindow.show();
             }
             catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @FXML
+    void addTextButtonClicked() {
+        try {
+            FXMLLoader fxmlLoader2 = new FXMLLoader(Start.class.getResource("TextAdder.fxml"));
+            Parent root1 = fxmlLoader2.load();
+            addWindow = new Stage();
+            addWindow.setTitle("Add text");
+            addWindow.setScene(new Scene(root1));
+            addWindow.setResizable(false);
+            addWindow.centerOnScreen();
+            addWindow.initOwner(Start.stage);
+            addWindow.initModality(Modality.WINDOW_MODAL);
+            addWindow.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

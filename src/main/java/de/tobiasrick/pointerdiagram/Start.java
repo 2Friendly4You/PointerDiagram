@@ -1,19 +1,14 @@
 package de.tobiasrick.pointerdiagram;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;
 import java.util.prefs.Preferences;
-import java.util.Locale;
 
 /**
  * Main class that starts the program

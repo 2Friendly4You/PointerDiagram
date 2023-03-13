@@ -4,7 +4,6 @@ import de.tobiasrick.pointerdiagram.canvas.AddToCanvas;
 import de.tobiasrick.pointerdiagram.canvas.DrawableShape;
 import de.tobiasrick.pointerdiagram.pointer.ExtensionPointer;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -38,7 +37,7 @@ public class ExtensionPointerAdderWindow {
     private RadioButton firstMethodButton;
 
     public static void connectionButtonClickedContinue(double[] connectionPoint, boolean firstConnectionButton) {
-        MainWindow.addPointerWindow.show();
+        MainWindow.addWindow.show();
         if (firstConnectionButton) {
             x1 = connectionPoint[0];
             y1 = connectionPoint[1];
@@ -49,7 +48,7 @@ public class ExtensionPointerAdderWindow {
     }
 
     public static void chooseConnectionPointCancelled() {
-        MainWindow.addPointerWindow.show();
+        MainWindow.addWindow.show();
     }
 
     @FXML
@@ -63,12 +62,12 @@ public class ExtensionPointerAdderWindow {
     }
 
     @FXML
-    void cancelButtonClicked(ActionEvent event) {
-        MainWindow.addPointerWindow.close();
+    void cancelButtonClicked() {
+        MainWindow.addWindow.close();
     }
 
     @FXML
-    void okButtonClicked(ActionEvent event) {
+    void okButtonClicked() {
         if (firstMethodButton.isSelected()){
             AddToCanvas.canvas.addShape(new DrawableShape(new ExtensionPointer(AddToCanvas.canvas.getGraphicsContext2D(), x1, y1, x2, y2, colorPickerBox.getValue(), colorPickerBox.getValue())));
         } else {
@@ -86,23 +85,23 @@ public class ExtensionPointerAdderWindow {
             AddToCanvas.canvas.addShape(new DrawableShape(new ExtensionPointer(AddToCanvas.canvas.getGraphicsContext2D(), x1, y1, x2, y2, colorPickerBox.getValue(), colorPickerBox.getValue())));
         }
 
-        MainWindow.addPointerWindow.close();
+        MainWindow.addWindow.close();
     }
 
     @FXML
-    void firstConnectionButtonClicked(ActionEvent event) {
-        MainWindow.addPointerWindow.hide();
+    void firstConnectionButtonClicked() {
+        MainWindow.addWindow.hide();
         AddToCanvas.chooseConnectionPoint(true);
     }
 
     @FXML
-    void secondConnectionButtonClicked(ActionEvent event) {
-        MainWindow.addPointerWindow.hide();
+    void secondConnectionButtonClicked() {
+        MainWindow.addWindow.hide();
         AddToCanvas.chooseConnectionPoint(false);
     }
 
     @FXML
-    void firstMethodButtonClicked(ActionEvent event) {
+    void firstMethodButtonClicked() {
         choosePoint1Button.setDisable(false);
         choosePoint2Button.setDisable(false);
         choosePoint3Button.setDisable(true);
@@ -114,7 +113,7 @@ public class ExtensionPointerAdderWindow {
     }
 
     @FXML
-    void secondMethodButtonClicked(ActionEvent event) {
+    void secondMethodButtonClicked() {
         choosePoint1Button.setDisable(true);
         choosePoint2Button.setDisable(true);
         choosePoint3Button.setDisable(false);

@@ -40,7 +40,7 @@ public final class I18N {
     /**
      * get the default locale. This is the systems default if contained in the supported locales, english otherwise.
      *
-     * @return
+     * @return the default locale
      */
     public static Locale getDefaultLocale() {
         Locale sysDefault = Locale.getDefault();

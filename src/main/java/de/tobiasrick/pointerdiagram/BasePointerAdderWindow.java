@@ -4,7 +4,6 @@ import de.tobiasrick.pointerdiagram.canvas.AddToCanvas;
 import de.tobiasrick.pointerdiagram.canvas.PointerCanvas;
 import de.tobiasrick.pointerdiagram.pointer.BasePointer;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
@@ -38,13 +37,13 @@ public class BasePointerAdderWindow {
 
 
     @FXML
-    void cancelButtonClicked(ActionEvent event) {
-        MainWindow.addPointerWindow.close();
+    void cancelButtonClicked() {
+        MainWindow.addWindow.close();
     }
 
     @FXML
-    void okButtonClicked(ActionEvent event) {
-        AddToCanvas.addShape(new BasePointer(PointerCanvas.graphicsContext, Double.parseDouble(lengthTextField.getText()), colorPickerBox.getValue(), colorPickerBox.getValue()));
-        MainWindow.addPointerWindow.close();
+    void okButtonClicked() {
+        AddToCanvas.addPointer(new BasePointer(PointerCanvas.graphicsContext, Double.parseDouble(lengthTextField.getText()), colorPickerBox.getValue(), colorPickerBox.getValue()));
+        MainWindow.addWindow.close();
     }
 }

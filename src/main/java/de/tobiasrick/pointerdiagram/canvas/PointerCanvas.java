@@ -32,8 +32,6 @@ public class PointerCanvas extends Canvas {
     public PointerCanvas() {
         super(2000, 2000);
         graphicsContext = this.getGraphicsContext2D();
-
-        //saveImage(Start.stage, this, "png");
     }
 
     /**

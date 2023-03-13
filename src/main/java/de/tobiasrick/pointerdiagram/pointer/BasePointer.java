@@ -16,8 +16,6 @@ public class BasePointer extends Pointer{
     // manages all ExtensionPointers that are added to the BasePointer
     private ArrayList<ExtensionPointer> extensionPointers = new ArrayList<>();
 
-    GraphicsContext gc;
-
     public BasePointer(GraphicsContext gc, int x1, int y1, int x2, int y2) {
         super(gc, x1, y1, x2, y2);
     }
