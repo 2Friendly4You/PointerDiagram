@@ -13,16 +13,17 @@ import javafx.scene.transform.Transform;
 public abstract class Pointer {
 
     private GraphicsContext gc;
-    private int x1;
-    private int y1;
-    private int x2;
-    private int y2;
+    private double x1;
+    private double y1;
+    private double x2;
+    private double y2;
     private Color strokeColor;
     private Color fillColor;
     private int ARR_SIZE = 8;
     private int lineWidth = 1;
+    private double length;
 
-    public Pointer(GraphicsContext gc, int x1, int y1, int x2, int y2){
+    public Pointer(GraphicsContext gc, double x1, double y1, double x2, double y2){
         this.gc = gc;
         this.x1 = x1;
         this.y1 = y1;
@@ -30,12 +31,19 @@ public abstract class Pointer {
         this.y2 = y2;
     }
 
-    public Pointer(GraphicsContext gc, int x1, int y1, int x2, int y2, Color strokeColor, Color fillColor) {
+    public Pointer(GraphicsContext gc, double x1, double y1, double x2, double y2, Color strokeColor, Color fillColor) {
         this.gc = gc;
         this.x1 = x1;
         this.y1 = y1;
         this.x2 = x2;
         this.y2 = y2;
+        this.strokeColor = strokeColor;
+        this.fillColor = fillColor;
+    }
+
+    public Pointer(GraphicsContext gc, double length, Color strokeColor, Color fillColor) {
+        this.gc = gc;
+        this.length = length;
         this.strokeColor = strokeColor;
         this.fillColor = fillColor;
     }
@@ -64,31 +72,31 @@ public abstract class Pointer {
         this.gc = gc;
     }
 
-    public int getX1() {
+    public double getX1() {
         return x1;
     }
 
-    public void setX1(int x1) {
+    public void setX1(double x1) {
         this.x1 = x1;
     }
 
-    public int getY1() {
+    public double getY1() {
         return y1;
     }
 
-    public void setY1(int y1) {
+    public void setY1(double y1) {
         this.y1 = y1;
     }
 
-    public int getX2() {
+    public double getX2() {
         return x2;
     }
 
-    public void setX2(int x2) {
+    public void setX2(double x2) {
         this.x2 = x2;
     }
 
-    public int getY2() {
+    public double getY2() {
         return y2;
     }
 
@@ -132,5 +140,29 @@ public abstract class Pointer {
         gc.fillPolygon(new double[]{len, len - ARR_SIZE, len - ARR_SIZE, len}, new double[]{0, -ARR_SIZE, ARR_SIZE, 0},
                 4);
         gc.setTransform(new Affine(Transform.rotate(0,0,0)));
+        gc.setTransform(new Affine());
+    }
+
+    public void drawArrow(double x1, double y1) {
+        x2 = length + x1;
+        y2 = y1;
+
+        gc.setStroke(strokeColor);
+        gc.setFill(fillColor);
+        gc.setLineWidth(lineWidth);
+
+        double dx = x2 - x1, dy = y2 - y1;
+        double angle = Math.atan2(dy, dx);
+        int len = (int) Math.sqrt(dx * dx + dy * dy);
+
+        Transform transform = Transform.translate(x1, y1);
+        transform = transform.createConcatenation(Transform.rotate(Math.toDegrees(angle), 0, 0));
+        gc.setTransform(new Affine(transform));
+
+        gc.strokeLine(0, 0, len, 0);
+        gc.fillPolygon(new double[]{len, len - ARR_SIZE, len - ARR_SIZE, len}, new double[]{0, -ARR_SIZE, ARR_SIZE, 0},
+                4);
+        gc.setTransform(new Affine(Transform.rotate(0,0,0)));
+        gc.setTransform(new Affine());
     }
 }

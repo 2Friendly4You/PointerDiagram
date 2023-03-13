@@ -86,8 +86,9 @@
    <ToolBar nodeOrientation="LEFT_TO_RIGHT">
      <items>
        <Button mnemonicParsing="false" onAction="#addBasePointerButtonClicked" text="BasePointer" />
-         <Button mnemonicParsing="false" text="ExtensionPointer" />
-         <Button mnemonicParsing="false" text="Remove Pointers" />
+         <Button mnemonicParsing="false" onAction="#addExtensionPointerButtonClicked" text="ExtensionPointer" />
+         <Button mnemonicParsing="false" onAction="#removePointersButtonClicked" text="Remove Pointers" />
+         <Button mnemonicParsing="false" text="Add Label" />
      </items>
    </ToolBar>
    <AnchorPane fx:id="anchorPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="183.0" prefWidth="139.0" VBox.vgrow="ALWAYS">

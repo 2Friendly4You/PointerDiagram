@@ -26,6 +26,10 @@ public class BasePointer extends Pointer{
         super(gc, x1, y1, x2, y2, strokeColor, fillColor);
     }
 
+    public BasePointer(GraphicsContext gc, double length, Color strokeColor, Color fillColor) {
+        super(gc, length, strokeColor, fillColor);
+    }
+
     public void addExtensionPointer(ExtensionPointer extensionPointer){
         extensionPointers.add(extensionPointer);
     }
@@ -55,5 +59,7 @@ public class BasePointer extends Pointer{
         for(ExtensionPointer pointer : extensionPointers){
             pointer.drawArrow();
         }
+
+        super.getGc().setTransform(new Affine());
     }
 }

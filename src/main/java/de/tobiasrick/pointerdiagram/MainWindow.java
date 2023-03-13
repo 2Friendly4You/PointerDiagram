@@ -1,5 +1,7 @@
 package de.tobiasrick.pointerdiagram;
 
+import de.tobiasrick.pointerdiagram.canvas.AddToCanvas;
+import de.tobiasrick.pointerdiagram.canvas.PointerCanvas;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -32,18 +34,23 @@ public class MainWindow {
     private ScrollPane scrollPane;
 
     @FXML
+    private PointerCanvas canvas;
+
+    @FXML
     void quitButtonClicked() {
         Start.stage.close();
     }
 
-    public static Stage addBasePointerWindow;
+    public static Stage addPointerWindow;
 
     /**
      * initializes the window (custom properties)
      */
     @FXML
     void initialize() {
-        // multilanguage text for buttons is configured
+        new AddToCanvas(canvas);
+
+        // multi-language text for buttons is configured
         buttonSwitchToEnglish.textProperty().bind(I18N.createStringBinding("button.languageSwitchToEnglish"));
         buttonSwitchToGerman.textProperty().bind(I18N.createStringBinding("button.languageSwitchToGerman"));
 
@@ -105,18 +112,8 @@ public class MainWindow {
     }
 
     @FXML
-    void addBasePointer(ActionEvent event) {
-
-    }
-
-    @FXML
-    void addExtensionPointer(ActionEvent event) {
-
-    }
-
-    @FXML
-    void deletePointers(ActionEvent event) {
-
+    void removePointersButtonClicked(ActionEvent event) {
+        canvas.clearShapes();
     }
 
     @FXML
@@ -146,17 +143,38 @@ public class MainWindow {
         try {
             FXMLLoader fxmlLoader2 = new FXMLLoader(Start.class.getResource("BasePointerAdder.fxml"));
             Parent root1 = fxmlLoader2.load();
-            addBasePointerWindow = new Stage();
-            addBasePointerWindow.setTitle("Add Base Pointer");
-            addBasePointerWindow.setScene(new Scene(root1));
-            addBasePointerWindow.setResizable(false);
-            addBasePointerWindow.centerOnScreen();
-            addBasePointerWindow.initOwner(Start.stage);
-            addBasePointerWindow.initModality(Modality.WINDOW_MODAL);
-            addBasePointerWindow.show();
+            addPointerWindow = new Stage();
+            addPointerWindow.setTitle("Add Base Pointer");
+            addPointerWindow.setScene(new Scene(root1));
+            addPointerWindow.setResizable(false);
+            addPointerWindow.centerOnScreen();
+            addPointerWindow.initOwner(Start.stage);
+            addPointerWindow.initModality(Modality.WINDOW_MODAL);
+            addPointerWindow.show();
         }
         catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void addExtensionPointerButtonClicked(ActionEvent event) {
+        if(canvas.basePointerExists()){
+            try {
+                FXMLLoader fxmlLoader2 = new FXMLLoader(Start.class.getResource("ExtensionPointerAdder.fxml"));
+                Parent root1 = fxmlLoader2.load();
+                addPointerWindow = new Stage();
+                addPointerWindow.setTitle("Add Extension Pointer");
+                addPointerWindow.setScene(new Scene(root1));
+                addPointerWindow.setResizable(false);
+                addPointerWindow.centerOnScreen();
+                addPointerWindow.initOwner(Start.stage);
+                addPointerWindow.initModality(Modality.WINDOW_MODAL);
+                addPointerWindow.show();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

@@ -2,7 +2,6 @@ package de.tobiasrick.pointerdiagram.canvas;
 
 import de.tobiasrick.pointerdiagram.I18N;
 import de.tobiasrick.pointerdiagram.pointer.BasePointer;
-import de.tobiasrick.pointerdiagram.pointer.ExtensionPointer;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.SnapshotParameters;
@@ -25,30 +24,14 @@ import java.util.List;
  * @author Tobias Rick
  */
 public class PointerCanvas extends Canvas {
-    private final List<DrawableShape> shapes = new ArrayList<>();
+    private List<DrawableShape> shapes = new ArrayList<>();
+    public static GraphicsContext graphicsContext;
 
     public PointerCanvas() {
         super(2000, 2000);
-
-        // set fill for rectangle
-        BasePointer basePointer = new BasePointer(this.getGraphicsContext2D(), 10, 10, 1200, 10);
-        basePointer.addExtensionPointer(new ExtensionPointer(this.getGraphicsContext2D(), 50, 10, 50, 400, Color.BLUE, Color.BLUE));
-        basePointer.addExtensionPointer(new ExtensionPointer(this.getGraphicsContext2D(), 10, 10, 50, 40, Color.RED, Color.RED));
-        addShape(new DrawableShape(basePointer, Color.BLACK, Color.BLUE));
-
+        graphicsContext = this.getGraphicsContext2D();
 
         //saveImage(Start.stage, this, "png");
-    }
-
-    public static double clamp( double value, double min, double max) {
-
-        if( Double.compare(value, min) < 0)
-            return min;
-
-        if( Double.compare(value, max) > 0)
-            return max;
-
-        return value;
     }
 
     /**
@@ -83,7 +66,7 @@ public class PointerCanvas extends Canvas {
     /**
      * draw all shapes to the canvas
      */
-    private void drawShapes() {
+    public void drawShapes() {
         GraphicsContext gc = getGraphicsContext2D();
         gc.clearRect(0, 0, getWidth(), getHeight());
         for (DrawableShape shape : shapes) {
@@ -167,5 +150,34 @@ public class PointerCanvas extends Canvas {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public ArrayList<double[]> getConnectionPoints() {
+        ArrayList<double[]> connectionPoints = new ArrayList<>();
+        for (DrawableShape shape : shapes) {
+            if(shape.getPointer() != null){
+                connectionPoints.add(new double[]{shape.getPointer().getX1(), shape.getPointer().getY1()});
+                connectionPoints.add(new double[]{shape.getPointer().getX2(), shape.getPointer().getY2()});
+            }
+        }
+        return connectionPoints;
+    }
+
+    public boolean basePointerExists(){
+        for (DrawableShape shape : shapes) {
+            if(shape.getPointer() != null){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public BasePointer getBasePointerWithCoords(double x1, double y1){
+        for (DrawableShape shape : shapes) {
+            if(shape.getPointer() != null && shape.getPointer() instanceof BasePointer && ((shape.getPointer().getX1() == x1 && shape.getPointer().getY1() == y1) || (shape.getPointer().getX2() == x1 && shape.getPointer().getY2() == y1))){
+                return (BasePointer) shape.getPointer();
+            }
+        }
+        return null;
     }
 }

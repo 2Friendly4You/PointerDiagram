@@ -11,65 +11,65 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.paint.Color?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="505.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.tobiasrick.pointerdiagram.BasePointerAdder">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.3333740234375" minWidth="10.0" prefWidth="125.33334350585938" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="513.3333307902019" minWidth="10.0" prefWidth="475.9999898274739" />
-  </columnConstraints>
-  <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-      <Label text="Length" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-         <GridPane.margin>
-            <Insets />
-         </GridPane.margin>
-      </Label>
-      <Label text="Color" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </padding>
-         <GridPane.margin>
-            <Insets />
-         </GridPane.margin>
-      </Label>
-      <GridPane prefHeight="134.0" prefWidth="425.0" GridPane.columnIndex="1">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <TextField promptText="Length" />
-            <ComboBox fx:id="powersOfTenComboBox" prefWidth="150.0" GridPane.columnIndex="1" />
-            <ComboBox fx:id="unitComboBox" prefHeight="25.0" prefWidth="145.0" GridPane.columnIndex="2" />
-         </children>
-      </GridPane>
-      <ColorPicker GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-         <value>
-            <Color />
-         </value></ColorPicker>
-      <GridPane prefHeight="30.0" prefWidth="235.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-        <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="406.66666666666663" minWidth="10.0" prefWidth="324.6667073567708" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="129.66670735677081" minWidth="0.0" prefWidth="64.6666259765625" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="70.33333333333331" minWidth="34.999959309895814" prefWidth="39.999979654947936" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Button cancelButton="true" mnemonicParsing="false" onAction="#cancelButtonClicked" text="Cancel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-            <Button defaultButton="true" mnemonicParsing="false" onAction="#okButtonClicked" text="Ok" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-         </children>
-      </GridPane>
-   </children>
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.tobiasrick.pointerdiagram.BasePointerAdderWindow">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.3333740234375" minWidth="10.0" prefWidth="125.33334350585938" />
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="513.3333307902019" minWidth="10.0" prefWidth="475.9999898274739" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    </rowConstraints>
+    <children>
+        <Label text="Length" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+            <GridPane.margin>
+                <Insets />
+            </GridPane.margin>
+        </Label>
+        <Label text="Color" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+            <GridPane.margin>
+                <Insets />
+            </GridPane.margin>
+        </Label>
+        <GridPane prefHeight="134.0" prefWidth="425.0" GridPane.columnIndex="1">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <TextField fx:id="lengthTextField" promptText="Length" />
+                <ComboBox fx:id="powersOfTenComboBox" prefHeight="25.0" prefWidth="165.0" GridPane.columnIndex="1" />
+                <ComboBox fx:id="unitComboBox" prefHeight="25.0" prefWidth="145.0" GridPane.columnIndex="2" />
+            </children>
+        </GridPane>
+        <ColorPicker fx:id="colorPickerBox" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+            <value>
+                <Color />
+            </value></ColorPicker>
+        <GridPane prefHeight="30.0" prefWidth="235.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="406.66666666666663" minWidth="10.0" prefWidth="324.6667073567708" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="129.66670735677081" minWidth="0.0" prefWidth="64.6666259765625" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="70.33333333333331" minWidth="34.999959309895814" prefWidth="39.999979654947936" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Button cancelButton="true" mnemonicParsing="false" onAction="#cancelButtonClicked" text="Cancel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                <Button defaultButton="true" mnemonicParsing="false" onAction="#okButtonClicked" text="Ok" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            </children>
+        </GridPane>
+    </children>
 </GridPane>

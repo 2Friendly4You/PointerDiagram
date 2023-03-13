@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.paint.Color?>
+
+<GridPane prefHeight="398.0" prefWidth="510.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.tobiasrick.pointerdiagram.ExtensionPointerAdderWindow">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="513.3333307902019" minWidth="10.0" prefWidth="393.3333435058594" />
+    </columnConstraints>
+    <rowConstraints>
+      <RowConstraints maxHeight="375.3333435058594" minHeight="10.0" prefHeight="363.3333435058594" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="124.66665458679199" minHeight="0.0" prefHeight="33.999989827473996" vgrow="SOMETIMES" />
+    </rowConstraints>
+    <children>
+        <GridPane GridPane.rowIndex="1">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="406.66666666666663" minWidth="10.0" prefWidth="384.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="129.66670735677081" minWidth="0.0" prefWidth="55.333333333333314" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="70.33333333333331" minWidth="34.999959309895814" prefWidth="44.3333740234375" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Button cancelButton="true" mnemonicParsing="false" onAction="#cancelButtonClicked" text="Cancel" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                <Button defaultButton="true" mnemonicParsing="false" onAction="#okButtonClicked" text="Ok" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            </children>
+        </GridPane>
+      <GridPane>
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="191.0" minWidth="10.0" prefWidth="107.66668701171875" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="191.0" minWidth="10.0" prefWidth="108.6666259765625" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="322.00002034505206" minWidth="10.0" prefWidth="256.66670735677087" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="36.66665840148926" minHeight="10.0" prefHeight="36.66665840148926" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="58.99998982747397" minHeight="10.0" prefHeight="52.666674931844085" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="73.66665649414062" minHeight="10.0" prefHeight="45.99998982747397" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="180.99998474121094" minHeight="10.0" prefHeight="50.00001017252603" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="98.0" minHeight="9.333343505859375" prefHeight="67.33331298828125" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="140.0" minHeight="10.0" prefHeight="62.333333333333314" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="165.3333511352539" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <RadioButton mnemonicParsing="false" onAction="#secondMethodButtonClicked" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+               <toggleGroup>
+                  <ToggleGroup fx:id="inputMode" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="firstMethodButton" mnemonicParsing="false" onAction="#firstMethodButtonClicked" selected="true" toggleGroup="$inputMode" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+              <GridPane prefHeight="134.0" prefWidth="425.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                  <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  </columnConstraints>
+                  <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  </rowConstraints>
+                  <children>
+                      <TextField fx:id="lengthTextField" disable="true" prefHeight="25.0" prefWidth="69.0" promptText="Length" />
+                      <ComboBox fx:id="powersOfTenComboBox" disable="true" prefWidth="150.0" GridPane.columnIndex="1" />
+                      <ComboBox fx:id="unitComboBox" disable="true" prefHeight="25.0" prefWidth="145.0" GridPane.columnIndex="2" />
+                  </children>
+              </GridPane>
+              <Label text="First connection" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+              <Button fx:id="choosePoint1Button" mnemonicParsing="false" onAction="#firstConnectionButtonClicked" text="Choose Point" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+              <Label text="Second connection" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                <Button fx:id="choosePoint2Button" mnemonicParsing="false" onAction="#secondConnectionButtonClicked" text="Choose Point" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+              <Label text="Color" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+                  <padding>
+                      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                  </padding>
+                  <GridPane.margin>
+                      <Insets />
+                  </GridPane.margin>
+              </Label>
+              <ColorPicker fx:id="colorPickerBox" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER">
+                  <value>
+                      <Color />
+                  </value>
+            </ColorPicker>
+            <Button fx:id="choosePoint3Button" disable="true" mnemonicParsing="false" onAction="#firstConnectionButtonClicked" text="Choose Point" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                  <TextField fx:id="angleTextField" disable="true" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="100.0" promptText="Angle" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+            <Label text="Length" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                  <Label text="Angle" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                  <ToggleButton fx:id="negativSenseOfRotationButton" disable="true" mnemonicParsing="false" text="Negativ" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+            <Label text="Sense of rotation" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+         </children>
+      </GridPane>
+    </children>
+</GridPane>
