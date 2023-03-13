@@ -52,10 +52,6 @@ public class Start extends Application {
             }
         }
 
-        // load language from settings
-        Locale loc = new Locale(prefs.get("language", "en"));
-        I18N.setLocale(loc);
-
         // show window
         stage.show();
     }

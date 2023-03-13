@@ -8,6 +8,8 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -150,6 +152,66 @@ public class PointerCanvas extends Canvas {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void copyImageToClipboard(PointerCanvas canvas, Color backgroundColor) {
+        // Take a snapshot of the canvas
+        SnapshotParameters params = new SnapshotParameters();
+        params.setFill(Color.TRANSPARENT); // ensure transparency is preserved
+        WritableImage snapshot = canvas.snapshot(params, null);
+
+        // Find the dimensions of the content on the canvas
+        double minX = Double.MAX_VALUE;
+        double minY = Double.MAX_VALUE;
+        double maxX = Double.MIN_VALUE;
+        double maxY = Double.MIN_VALUE;
+        for (double x = 0; x < canvas.getWidth(); x++) {
+            for (double y = 0; y < canvas.getHeight(); y++) {
+                Color color = Color.rgb(
+                        (snapshot.getPixelReader().getArgb((int) x, (int) y) >> 16) & 0xFF,
+                        (snapshot.getPixelReader().getArgb((int) x, (int) y) >> 8) & 0xFF,
+                        (snapshot.getPixelReader().getArgb((int) x, (int) y)) & 0xFF,
+                        (snapshot.getPixelReader().getArgb((int) x, (int) y) >> 24) & 1
+                );
+                if (color.equals(Color.TRANSPARENT)) {
+                    continue; // skip transparent pixels
+                }
+                if (x < minX) {
+                    minX = x;
+                }
+                if (y < minY) {
+                    minY = y;
+                }
+                if (x > maxX) {
+                    maxX = x;
+                }
+                if (y > maxY) {
+                    maxY = y;
+                }
+            }
+        }
+
+        // Define the rectangular area to be cut out
+        double x = minX - 20;    // x-coordinate of the rectangle
+        double y = minY - 20;    // y-coordinate of the rectangle
+        double w = maxX - minX + 40;    // width of the rectangle
+        double h = maxY - minY + 40;    // height of the rectangle
+
+        if (x < 0) x = 0;
+        if (y < 0) y = 0;
+        if (w > canvas.getWidth()) w = canvas.getWidth();
+        if (h > canvas.getHeight()) h = canvas.getHeight();
+
+        params = new SnapshotParameters();
+        params.setFill(backgroundColor);    // make transparent pixels non-opaque
+        params.setViewport(new Rectangle2D(x, y, w, h));    // set the region to be captured
+        snapshot = canvas.snapshot(params, null);
+
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        ClipboardContent content = new ClipboardContent();
+        // for paste as image, e.g. in GIMP
+        content.putImage(snapshot); // the image you want, as javafx.scene.image.Image
+        clipboard.setContent(content);
     }
 
     public ArrayList<double[]> getConnectionPoints() {

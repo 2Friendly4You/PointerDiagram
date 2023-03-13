@@ -37,8 +37,10 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
@@ -47,43 +49,29 @@
 <VBox fx:id="vBox" prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.tobiasrick.pointerdiagram.MainWindow">
   <MenuBar VBox.vgrow="NEVER">
     <Menu mnemonicParsing="false" text="File">
-      <MenuItem mnemonicParsing="false" text="New" />
-      <MenuItem mnemonicParsing="false" text="Open…" />
-      <Menu mnemonicParsing="false" text="Open Recent" />
-      <SeparatorMenuItem mnemonicParsing="false" />
-      <MenuItem mnemonicParsing="false" text="Close" />
-      <MenuItem mnemonicParsing="false" text="Save" />
-      <MenuItem mnemonicParsing="false" text="Save As…" />
-      <MenuItem mnemonicParsing="false" text="Revert" />
+         <MenuItem mnemonicParsing="false" onAction="#exportAsPNGButtonClicked" text="Save as png" />
+         <MenuItem mnemonicParsing="false" onAction="#copyToClipboardButtonClicked" text="Copy image to clipboard" />
       <SeparatorMenuItem mnemonicParsing="false" />
       <MenuItem mnemonicParsing="false" text="Preferences…" />
          <Menu mnemonicParsing="false" text="Languages">
            <items>
-             <MenuItem fx:id="buttonSwitchToEnglish" mnemonicParsing="false" onAction="#switchToEnglish" text="English" />
-               <MenuItem fx:id="buttonSwitchToGerman" mnemonicParsing="false" onAction="#switchToGerman" text="Deutsch" />
+               <RadioMenuItem fx:id="buttonSwitchToEnglish" mnemonicParsing="false" onAction="#switchToEnglish" selected="true" text="English">
+                  <toggleGroup>
+                     <ToggleGroup fx:id="languageToggleGroup" />
+                  </toggleGroup>
+               </RadioMenuItem>
+               <RadioMenuItem fx:id="buttonSwitchToGerman" mnemonicParsing="false" onAction="#switchToGerman" text="German" toggleGroup="$languageToggleGroup" />
            </items>
          </Menu>
       <SeparatorMenuItem mnemonicParsing="false" />
       <MenuItem mnemonicParsing="false" onAction="#quitButtonClicked" text="Quit" />
-    </Menu>
-    <Menu mnemonicParsing="false" text="Edit">
-      <MenuItem mnemonicParsing="false" text="Undo" />
-      <MenuItem mnemonicParsing="false" text="Redo" />
-      <SeparatorMenuItem mnemonicParsing="false" />
-      <MenuItem mnemonicParsing="false" text="Cut" />
-      <MenuItem mnemonicParsing="false" text="Copy" />
-      <MenuItem mnemonicParsing="false" text="Paste" />
-      <MenuItem mnemonicParsing="false" text="Delete" />
-      <SeparatorMenuItem mnemonicParsing="false" />
-      <MenuItem mnemonicParsing="false" text="Select All" />
-      <MenuItem mnemonicParsing="false" text="Unselect All" />
     </Menu>
     <Menu mnemonicParsing="false" text="Help">
          <MenuItem mnemonicParsing="false" onAction="#openAuthorLink" text="About Author" />
          <MenuItem mnemonicParsing="false" onAction="#openGithubLink" text="Github Project" />
     </Menu>
   </MenuBar>
-   <ToolBar nodeOrientation="LEFT_TO_RIGHT">
+   <ToolBar fx:id="toolBar" nodeOrientation="LEFT_TO_RIGHT">
      <items>
        <Button mnemonicParsing="false" onAction="#addBasePointerButtonClicked" text="BasePointer" />
          <Button mnemonicParsing="false" onAction="#addExtensionPointerButtonClicked" text="ExtensionPointer" />

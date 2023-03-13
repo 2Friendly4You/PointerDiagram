@@ -80,10 +80,8 @@ public class ExtensionPointerAdderWindow {
             double deltaX = Double.parseDouble(lengthTextField.getText()) * Math.cos(angleRad);
             double deltaY = Double.parseDouble(lengthTextField.getText()) * Math.sin(angleRad);
 
-            double x3 = x1 + deltaX;
-            double y3 = y1 + deltaY;
-            x2 = x3;
-            y2 = y3;
+            x2 = x1 + deltaX;
+            y2 = y1 + deltaY;
 
             AddToCanvas.canvas.addShape(new DrawableShape(new ExtensionPointer(AddToCanvas.canvas.getGraphicsContext2D(), x1, y1, x2, y2, colorPickerBox.getValue(), colorPickerBox.getValue())));
         }
