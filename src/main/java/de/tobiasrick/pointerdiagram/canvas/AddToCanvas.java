@@ -7,6 +7,7 @@ import de.tobiasrick.pointerdiagram.pointer.Pointer;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 
@@ -43,12 +44,13 @@ public class AddToCanvas {
                 canvas.drawShapes();
                 double w = 4;
                 double h = 4;
+                canvas.getGraphicsContext2D().setFill(Color.RED);
                 canvas.getGraphicsContext2D().fillOval(nearestPointToMouse[0] - w/2, nearestPointToMouse[1] - h/2, w, h);
+                canvas.getGraphicsContext2D().setFill(Color.RED);
             }
             if(textToAdd != null){
                 canvas.drawShapes();
                 textToAdd.draw(event.getX(), event.getY());
-                System.out.println("Drawing");
             }
         });
 
