@@ -150,7 +150,7 @@ button:active {
 #sortable-list li {
     margin: 5px;
     padding: 10px;
-    background-color: #f4f4f4;
+    background-color: var(--background);
     border: 1px solid #ddd;
     cursor: move;
 }
