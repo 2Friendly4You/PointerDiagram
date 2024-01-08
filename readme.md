@@ -31,7 +31,7 @@ To use the Electrical Engineering Pointer Visualizer, simply visit our [website]
 
 ## Contributing
 
-We welcome contributions from the community! If you have suggestions for improvements or new features, please open an issue or submit a pull request on our [GitHub repository](#).
+We welcome contributions from the community! If you have suggestions for improvements or new features, please open an issue or submit a pull request on our [GitHub repository](https://github.com/2Friendly4You/PointerDiagram).
 
 ## Acknowledgments
 
