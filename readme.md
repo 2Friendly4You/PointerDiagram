@@ -14,7 +14,7 @@ Electrical Engineering Pointer Visualizer is a web-based tool designed for engin
 
 ## Getting Started
 
-To use the Electrical Engineering Pointer Visualizer, simply visit our [website](http://tobiasrick.de/PointerDiagram/index.html) (link to the website). The tool is web-based and requires no installation.
+To use the Electrical Engineering Pointer Visualizer, simply visit our [website](http://tobiasrick.de/PointerDiagram/index.html). The tool is web-based and requires no installation.
 
 ### Prerequisites
 
@@ -31,7 +31,7 @@ To use the Electrical Engineering Pointer Visualizer, simply visit our [website]
 
 ## Contributing
 
-We welcome contributions from the community! If you have suggestions for improvements or new features, please open an issue or submit a pull request on our [GitHub repository](#) (link to the GitHub repository).
+We welcome contributions from the community! If you have suggestions for improvements or new features, please open an issue or submit a pull request on our [GitHub repository](#).
 
 ## Acknowledgments
 
