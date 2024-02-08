@@ -131,13 +131,16 @@ button:active {
 }
 
 #list-container {
-    min-width: 300px;
+    height: 300px;
+    width: 280px;
     background: var(--background);
     color: var(--text);
     padding: 10px;
     /* Allows resizing both horizontally and vertically */
     z-index: 9;
     position: absolute;
+
+    overflow: auto;
 
     background-color: var(--background);
     border: 1px solid #ddd;
@@ -155,6 +158,13 @@ button:active {
     z-index: 10;
     background-color: var(--primary);
     color: var(--text);
+
+    /* fixed to the top */
+    position: sticky;
+    top: 0;
+
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 
 #sortable-list {
@@ -164,18 +174,18 @@ button:active {
 }
 
 #sortable-list li {
-    margin: 5px;
+    margin-bottom: 10px;
     padding: 10px;
     background-color: var(--background);
     border: 1px solid #ddd;
     border-radius: 5px;
-    cursor: move;
+    text-align: left;
 }
 
 .delete-btn {
     float: right;
     background-color: red;
-    color: white;
+    color: var(--text);
     border: none;
     cursor: pointer;
 }

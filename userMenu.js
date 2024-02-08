@@ -136,7 +136,6 @@ document.getElementById("documentName").addEventListener("click", function () {
   this.select();
 });
 
-
 document.addEventListener("DOMContentLoaded", () => {
   const list = document.getElementById("sortable-list");
 
@@ -187,7 +186,11 @@ function addItemToList(element) {
   // Store the ID in a data attribute
   newItem.setAttribute("data-id", element.id);
 
-  newItem.textContent = "Element " + element.id; // Example text content
+  const input = document.createElement("input");
+  input.value = "Element " + element.id;
+  // set size of the input to the length of the value
+  input.size = 8;
+  newItem.appendChild(input);
 
   const upBtn = document.createElement("button");
   upBtn.textContent = "⏫";
@@ -219,61 +222,81 @@ function updateList() {
 // Make the DIV element draggable:
 dragElement(document.getElementById("list-container"));
 
+// Assuming your close button has an ID or class, add event listeners for touch and click
+document.getElementById("hide-list").addEventListener("click", hideList);
+document.getElementById("hide-list").addEventListener("touchstart", hideList);
+
 function dragElement(elmnt) {
-  var pos1 = 0,
-    pos2 = 0,
-    pos3 = 0,
-    pos4 = 0;
-  if (document.getElementById(elmnt.id + "header")) {
-    // if present, the header is where you move the DIV from:
-    document.getElementById(elmnt.id + "header").onmousedown = dragMouseDown;
-  } else {
-    // otherwise, move the DIV from anywhere inside the DIV:
-    elmnt.onmousedown = dragMouseDown;
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  var header = document.getElementById(elmnt.id + "-header");
+
+  if (header) {
+    header.addEventListener("mousedown", dragMouseDown, false);
+    header.addEventListener("touchstart", dragMouseDown, { passive: false });
   }
 
   function dragMouseDown(e) {
-    e = e || window.event;
     e.preventDefault();
-    // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
+    if (e.type == "touchstart") {
+      pos3 = e.touches[0].clientX;
+      pos4 = e.touches[0].clientY;
+    } else {
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+    }
+
+    document.addEventListener("mouseup", closeDragElement, false);
+    document.addEventListener("touchend", closeDragElement, false);
+    document.addEventListener("mousemove", elementDrag, false);
+    document.addEventListener("touchmove", elementDrag, { passive: false });
   }
 
   function elementDrag(e) {
-    e = e || window.event;
     e.preventDefault();
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    // set the element's new position:
-    elmnt.style.top = elmnt.offsetTop - pos2 + "px";
-    elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+    if (e.type == "touchmove") {
+      pos1 = pos3 - e.touches[0].clientX;
+      pos2 = pos4 - e.touches[0].clientY;
+      pos3 = e.touches[0].clientX;
+      pos4 = e.touches[0].clientY;
+    } else {
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+    }
+
+    // Calculate new position with constraints
+    var newLeft = elmnt.offsetLeft - pos1;
+    var newTop = elmnt.offsetTop - pos2;
+
+    // Constrain the movement within the viewport
+    newLeft = Math.max(0, Math.min(newLeft, window.innerWidth - elmnt.offsetWidth));
+    newTop = Math.max(0, Math.min(newTop, window.innerHeight - elmnt.offsetHeight));
+
+    elmnt.style.left = newLeft + "px";
+    elmnt.style.top = newTop + "px";
   }
 
   function closeDragElement() {
-    // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
+    document.removeEventListener("mouseup", closeDragElement, false);
+    document.removeEventListener("touchend", closeDragElement, false);
+    document.removeEventListener("mousemove", elementDrag, false);
+    document.removeEventListener("touchmove", elementDrag, false);
   }
 }
+
+function hideList() {
+  document.getElementById("list-container").style.display = "none";
+}
+
 
 function showList() {
   document.getElementById("list-container").style.display = "block";
   updateList();
-  // center the list in the middle of the screen
+  // Center the list in the middle of the screen
   let listContainer = document.getElementById("list-container");
   listContainer.style.left =
     window.innerWidth / 2 - listContainer.offsetWidth / 2 + "px";
   listContainer.style.top =
     window.innerHeight / 2 - listContainer.offsetHeight / 2 + "px";
-}
-
-function hideList() {
-  document.getElementById("list-container").style.display = "none";
 }
