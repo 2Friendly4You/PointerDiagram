@@ -70,9 +70,11 @@ button {
     border: solid 1px var(--primary);
     border-radius: 5px;
     padding: 5px 10px;
-    margin: 0 5px;
+    margin: 2px;
     cursor: pointer;
     box-shadow: 0px 3px rgba(125, 125, 125, 0.5);
+
+    color: var(--text);
 }
 
 button:active {
@@ -129,16 +131,30 @@ button:active {
 }
 
 #list-container {
-    min-width: 100px;
-    max-width: 50%; /* Set max width to 100% of the screen */
-    max-height: 80vh; /* Set max height to 100% of the screen */
-    height: 100%;
+    min-width: 300px;
     background: var(--background);
     color: var(--text);
     padding: 10px;
-    overflow: auto; /* Enables scrollbar if content overflows */
-    resize: both; /* Allows resizing both horizontally and vertically */
-    z-index: 100;
+    /* Allows resizing both horizontally and vertically */
+    z-index: 9;
+    position: absolute;
+
+    background-color: var(--background);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+
+    /* text inside on right side */
+    text-align: right;
+
+    display: none;
+}
+
+#list-container-header {
+    padding: 10px;
+    cursor: move;
+    z-index: 10;
+    background-color: var(--primary);
+    color: var(--text);
 }
 
 #sortable-list {
@@ -152,6 +168,7 @@ button:active {
     padding: 10px;
     background-color: var(--background);
     border: 1px solid #ddd;
+    border-radius: 5px;
     cursor: move;
 }
 

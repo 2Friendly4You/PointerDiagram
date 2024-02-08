@@ -1,16 +1,10 @@
-// load data theme from local storage and if not set, set it to user preference
+// load data theme from local storage and if not set, set it to light
 const theme = localStorage.getItem("theme");
 if (theme) {
   document.documentElement.setAttribute("data-theme", theme);
 } else {
-  const userPrefersDark =
-    window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches;
-  if (userPrefersDark) {
-    document.documentElement.setAttribute("data-theme", "dark");
-  } else {
-    document.documentElement.setAttribute("data-theme", "light");
-  }
+  document.documentElement.setAttribute("data-theme", "light");
+  localStorage.setItem("theme", "light");
 }
 
 // toggle data theme
