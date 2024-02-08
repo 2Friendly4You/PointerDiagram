@@ -131,6 +131,12 @@ function loadDataFromFile() {
   input.click();
 }
 
+// Add click event listener to select the text when clicked
+document.getElementById("documentName").addEventListener("click", function () {
+  this.select();
+});
+
+
 document.addEventListener("DOMContentLoaded", () => {
   const list = document.getElementById("sortable-list");
 
@@ -262,8 +268,10 @@ function showList() {
   updateList();
   // center the list in the middle of the screen
   let listContainer = document.getElementById("list-container");
-  listContainer.style.left = window.innerWidth / 2 - listContainer.offsetWidth / 2 + "px";
-  listContainer.style.top = window.innerHeight / 2 - listContainer.offsetHeight / 2 + "px";
+  listContainer.style.left =
+    window.innerWidth / 2 - listContainer.offsetWidth / 2 + "px";
+  listContainer.style.top =
+    window.innerHeight / 2 - listContainer.offsetHeight / 2 + "px";
 }
 
 function hideList() {
