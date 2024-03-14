@@ -18,6 +18,3 @@ function toggleTheme() {
     localStorage.setItem("theme", "dark");
   }
 }
-
-// add event listener to button
-document.getElementById("change-theme").addEventListener("click", toggleTheme);

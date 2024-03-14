@@ -3,8 +3,8 @@ let ctx = canvas.getContext("2d");
 
 let cameraOffset = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 let cameraZoom = 1;
-let MAX_ZOOM = 10;
-let MIN_ZOOM = 0.1;
+let MAX_ZOOM = 100;
+let MIN_ZOOM = 0.01;
 let SCROLL_SENSITIVITY = 0.005;
 
 function draw() {
@@ -152,15 +152,10 @@ function adjustZoom(zoomAmount, zoomFactor) {
     cameraZoom = Math.min(cameraZoom, MAX_ZOOM);
     cameraZoom = Math.max(cameraZoom, MIN_ZOOM);
   }
-
-  // update the slider
-  document.querySelector('input[type="range"]').value = cameraZoom;
 }
 
 function setZoom(zoom) {
   cameraZoom = zoom;
-  // update the slider
-  document.querySelector('input[type="range"]').value = cameraZoom;
 }
 
 canvas.addEventListener("mousedown", onPointerDown);

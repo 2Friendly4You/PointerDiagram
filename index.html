@@ -17,7 +17,7 @@
 
 <body>
     <canvas id="canvas"></canvas>
-    <div class="controls">
+    <div id="controls">
         <div class="dropdown">
             <button class="dropdown-button">File</button>
             <div class="dropdown-content">
@@ -33,12 +33,18 @@
             <button onclick="exportAsJPG()">Export as JPG</button>
             </div>
         </div>
+        <div class="dropdown">
+            <button class="dropdown-button">Extras</button>
+            <div class="dropdown-content">
+                <button onclick="centerOnContent()">Center on content</button>
+                <button onclick="toggleTheme()">Toogle theme</button>
+                <button onclick="clearAll()">Remove all</button>
+            </div>
+        </div>
 
         <input type="text" value="New Document" id="documentName" required>
-        <button onclick="centerOnContent()">Center on content</button>
         <button onclick="addPointer()">Add pointer</button>
         <button onclick="addText()">Add text</button>
-        <button onclick="clearAll()">Remove all</button>
         <button onclick="showList()">Show element list</button>
         <div id="list-container">
             <div id="list-container-header"><button onclick="hideList()" id="hide-list">x</button></div>
@@ -46,11 +52,9 @@
         </div>
     </div>
 
-    <div class="zoom-controls">
+    <div id="zoom-controls">
         <button onclick="adjustZoom(-0.1)">-</button>
-        <input type="range" min="0.1" max="10" value="1" step="0.1" oninput="setZoom(this.value)" />
         <button onclick="adjustZoom(+0.1)">+</button>
-        <button id="change-theme"><span class="material-symbols-outlined">contrast</span></button>
     </div>
 
     <script src="canvas.js" defer></script>

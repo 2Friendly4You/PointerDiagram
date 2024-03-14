@@ -29,29 +29,27 @@ body {
     background: var(--background);
 }
 
-#change-theme {
-    background: var(--primary);
-    color: var(--text);
-    border: solid 1px var(--primary);
-    border-radius: 5px;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-
-.controls {
+#controls {
     z-index: 100;
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 0px;
+    left: 0px;
     padding: 10px;
-    background: transparent;
+    background: var(--secondary);
     color: var(--text);
     font-family: sans-serif;
     font-size: 12px;
     user-select: none;
 }
 
-.zoom-controls {
+#controls input {
+    margin: 5px;
+    padding: 5px;
+    border: none;
+    border-radius: 5px;
+}
+
+#zoom-controls {
     position: absolute;
     bottom: 10px;
     right: 10px;
@@ -72,18 +70,7 @@ button {
     padding: 5px 10px;
     margin: 2px;
     cursor: pointer;
-    box-shadow: 0px 3px rgba(125, 125, 125, 0.5);
 
-    color: var(--text);
-}
-
-button:active {
-    box-shadow: 0px 0px rgba(125, 125, 125, 0.5);
-    transform: translateY(3px);
-}
-
-/* Dropdown Button */
-.dropdown-button {
     color: var(--text);
 }
 
@@ -93,21 +80,24 @@ button:active {
     display: inline-block;
 }
 
+.dropdown-button {
+    background-color: var(--primary);
+    border: solid 1px var(--primary);
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 2px;
+    cursor: pointer;
+
+    color: var(--text);
+}
+
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: var(--background);
+    background-color: var(--secondary);
     min-width: 160px;
     z-index: 1;
-}
-
-/* Links inside the dropdown */
-.dropdown-content button {
-    color: var(--text);
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
 }
 
 .dropdown-content button {
@@ -119,8 +109,7 @@ button:active {
 }
 
 /* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content,
-.dropdown:focus-within .dropdown-content {
+.dropdown:hover .dropdown-content {
     display: block;
 }
 
@@ -167,6 +156,12 @@ button:active {
     border-radius: 5px;
 }
 
+#list-container-header button {
+    background-color: var(--primary);
+    color: var(--text);
+    filter: brightness(1.2);
+}
+
 #sortable-list {
     min-width: 100px;
     list-style-type: none;
@@ -192,8 +187,8 @@ button:active {
 
 .move-btn {
     margin-left: 10px;
-    background-color: blue;
-    color: white;
+    background-color: var(--primary);
+    color: var(--text);
     border: none;
     cursor: pointer;
 }

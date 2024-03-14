@@ -15,9 +15,6 @@ function centerOnContent() {
 
   // reset the zoom
   cameraZoom = 1;
-
-  // update the slider
-  document.querySelector('input[type="range"]').value = cameraZoom;
 }
 
 function exportAsPNG() {
@@ -222,7 +219,6 @@ function updateList() {
 // Make the DIV element draggable:
 dragElement(document.getElementById("list-container"));
 
-// Assuming your close button has an ID or class, add event listeners for touch and click
 document.getElementById("hide-list").addEventListener("click", hideList);
 document.getElementById("hide-list").addEventListener("touchstart", hideList);
 
