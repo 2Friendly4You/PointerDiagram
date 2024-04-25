@@ -63,28 +63,28 @@ function drawPointer(pointer) {
   let color = pointer.color;
   let lineWidth = pointer.lineWidth;
 
-  // a arrow is a line with a triangle at the end
-  // convert from radians to degrees
-  angle = angle * (180 / Math.PI);
+  // an arrow is a line with a triangle at the end
+  // convert from degrees to radians
+  angle = (angle * Math.PI) / 180;
   
   // draw the line in the direction of the angle and the length and the width and the color
   ctx.beginPath();
   ctx.moveTo(x, y);
-  ctx.lineTo(x + length * Math.cos(angle), y + length * Math.sin(angle));
+  ctx.lineTo(x + length * Math.cos(angle), y + length * -Math.sin(angle));
   ctx.strokeStyle = color;
   ctx.lineWidth = lineWidth;
   ctx.stroke();
 
   // draw the triangle at the end of the line
   ctx.beginPath();
-  ctx.moveTo(x + length * Math.cos(angle), y + length * Math.sin(angle));
+  ctx.moveTo(x + length * Math.cos(angle), y + length * -Math.sin(angle));
   ctx.lineTo(
     x + length * Math.cos(angle) - 10 * Math.cos(angle - 0.5),
-    y + length * Math.sin(angle) - 10 * Math.sin(angle - 0.5)
+    y + length * -Math.sin(angle) - 10 * -Math.sin(angle - 0.5)
   );
   ctx.lineTo(
     x + length * Math.cos(angle) - 10 * Math.cos(angle + 0.5),
-    y + length * Math.sin(angle) - 10 * Math.sin(angle + 0.5)
+    y + length * -Math.sin(angle) - 10 * -Math.sin(angle + 0.5)
   );
   ctx.closePath();
   ctx.fillStyle = color;
