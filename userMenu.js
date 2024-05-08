@@ -47,7 +47,10 @@ function addText() {
   draw();
 }
 
-function clearAll() {
+function clearAll(userConfirmed = false) {
+  if (userConfirmed && !confirm("Are you sure you want to clear the canvas?")) {
+    return;
+  }
   listToDraw = [];
   updateList();
   draw();
@@ -55,7 +58,7 @@ function clearAll() {
 
 function newDocument() {
   document.getElementById("documentName").value = "New Document";
-  clearAll();
+  clearAll(false);
 }
 
 function saveDataToFile() {
