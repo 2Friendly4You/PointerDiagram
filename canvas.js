@@ -70,7 +70,7 @@ function drawPointer(pointer) {
   // draw the line in the direction of the angle and the length and the width and the color
   ctx.beginPath();
   ctx.moveTo(x, y);
-  ctx.lineTo(x + length * Math.cos(angle), y + length * -Math.sin(angle));
+  ctx.lineTo(x + (length - 1) * Math.cos(angle), y + (length - 1) * -Math.sin(angle));
   ctx.strokeStyle = color;
   ctx.lineWidth = lineWidth;
   ctx.stroke();
