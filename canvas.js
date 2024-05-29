@@ -42,7 +42,6 @@ function getEventLocation(e) {
   }
 }
 
-
 function drawText(text) {
   let x = text.x;
   let y = text.y;

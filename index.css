@@ -14,13 +14,14 @@
     --accent: #0c5cb0;
 }
 
-
 html,
 body {
     height: 100%;
     margin: 0;
     padding: 0px;
     overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: none;
 }
 
 #canvas {
