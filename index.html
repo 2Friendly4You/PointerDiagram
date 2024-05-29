@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="version" content="v1.0.1">
     <title>Pointer Diagram</title>
 
     <link rel="stylesheet" href="index.css">
@@ -41,7 +42,15 @@
                 <button onclick="clearAll(true)">Remove all</button>
             </div>
         </div>
-
+        <div class="dropdown">
+            <button class="dropdown-button">Help</button>
+            <div class="dropdown-content">
+                <button onclick="checkForUpdates()">Check for updates</button>
+                <button onclick="openGithubPage()">Open GitHub page</button>
+                <button onclick="newBugOrFeature()">Report a bug or request a feature</button>
+                <button onclick="emailContact()">E-Mail contact</button>
+            </div>
+        </div>
         <input type="text" value="New Document" id="documentName" required>
         <button onclick="addPointer()">Add pointer</button>
         <button onclick="addText()">Add text</button>
@@ -62,7 +71,6 @@
     <script src="colorTheme.js" defer></script>
     <script src="canvasData.js" defer></script>
     <script src="startSite.js" defer></script>
-
 </body>
 
 </html
