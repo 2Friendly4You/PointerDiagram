@@ -97,14 +97,15 @@ button {
     display: none;
     position: absolute;
     background-color: var(--secondary);
-    min-width: 160px;
+    min-width: 180px;
     z-index: 1;
 }
 
 .dropdown-content button {
     color: var(--text);
-    padding: 12px 16px;
-    margin-top: 6px;
+    padding: 6px 10px;
+    margin-top: 4px;
+    margin: 6px;
     text-decoration: none;
     display: block;
 }

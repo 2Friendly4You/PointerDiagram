@@ -227,6 +227,50 @@ function showList() {
   }px`;
 }
 
+function checkForUpdates() {
+  // get version from meta tag
+  let version = document.querySelector('meta[name="version"]').content;
+  // delete everything except numbers and dots
+  version = version.replace(/[^0-9.]/g, "");
+
+  fetch("https://api.github.com/repos/2Friendly4You/PointerDiagram/releases")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      let latest = data[0].tag_name;
+      // delete everything except numbers and dots
+      latest = latest.replace(/[^0-9.]/g, "");
+      if (version != latest) {
+        alert(
+          "There is a new version available: " +
+            latest +
+            "\nYou can download it from the releases page on GitHub if you run it locally or contact your administrator."
+        );
+      } else {
+        alert("You are using the latest version.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("Failed to check for updates. Please try again later.");
+    });
+}
+
+function openGithubPage() {
+  window.open("https://github.com/2Friendly4You/PointerDiagram", "_blank");
+}
+
+function newBugOrFeature() {
+  window.open(
+    "https://github.com/2Friendly4You/PointerDiagram/issues/new/choose",
+    "_blank"
+  );
+}
+
+function emailContact(){
+  window.open("mailto:pointerdiagram@tobiasrick.de");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   setupEventListeners();
   dragElement(document.getElementById("list-container"));

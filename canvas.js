@@ -11,7 +11,7 @@ function draw() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  // Translate to the canvas centre before zooming - so you'll always zoom on what you're looking directly at
+  // Translate to the canvas center before zooming
   ctx.translate(window.innerWidth / 2, window.innerHeight / 2);
   ctx.scale(cameraZoom, cameraZoom);
   ctx.translate(
