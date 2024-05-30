@@ -1,8 +1,5 @@
 listToDraw = [];
 
-// standard pointer
-listToDraw.push(new Pointer(0, 0, 140, 0, "red", 1));
-listToDraw.push(new Text(0, 10, "Hello World", 20, "blue", "Arial"));
 draw();
 
 function Pointer(x, y, length, angle, color, lineWidth) {

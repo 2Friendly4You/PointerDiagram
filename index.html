@@ -18,46 +18,63 @@
 
 <body>
     <canvas id="canvas"></canvas>
-    <div id="controls">
-        <div class="dropdown">
-            <button class="dropdown-button">File</button>
-            <div class="dropdown-content">
-                <button onclick="newDocument()">New Document</button>
-                <button onclick="saveDataToFile()">Save</button>
-                <button onclick="loadDataFromFile()">Load</button>
+    <div id="menus">
+        <div id="controls">
+            <div class="dropdown">
+                <button class="dropdown-button">File</button>
+                <div class="dropdown-content">
+                    <button onclick="newDocument()">New Document</button>
+                    <button onclick="saveDataToFile()">Save</button>
+                    <button onclick="loadDataFromFile()">Load</button>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropdown-button">Export</button>
+                <div class="dropdown-content">
+                    <button onclick="exportAsImage('png')">Export as PNG</button>
+                    <button onclick="exportAsImage('jpeg')">Export as JPG</button>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropdown-button">Extras</button>
+                <div class="dropdown-content">
+                    <button onclick="centerOnContent()">Center on content</button>
+                    <button onclick="toggleTheme()">Toogle theme</button>
+                    <button onclick="clearAll(true)">Remove all</button>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropdown-button">Help</button>
+                <div class="dropdown-content">
+                    <button onclick="checkForUpdates()">Check for updates</button>
+                    <button onclick="openGithubPage()">Open GitHub page</button>
+                    <button onclick="newBugOrFeature()">Report a bug or request a feature</button>
+                    <button onclick="emailContact()">E-Mail contact</button>
+                </div>
+            </div>
+            <input type="text" value="New Document" id="documentName" required>
+            <button onclick="addPointer()">Add pointer</button>
+            <button onclick="addText()">Add text</button>
+            <button onclick="showList()">Show element list</button>
+            <div id="list-container">
+                <div id="list-container-header"><button onclick="hideList()" id="hide-list">x</button></div>
+                <ul id="sortable-list"></ul>
             </div>
         </div>
-        <div class="dropdown">
-            <button class="dropdown-button">Export</button>
-            <div class="dropdown-content">
-                <button onclick="exportAsImage('png')">Export as PNG</button>
-                <button onclick="exportAsImage('jpeg')">Export as JPG</button>
+
+        <div id="add-menu">
+            <div id="add-pointer">
+                <input type="number" placeholder="Length" id="pointer-length" required>
+                <input type="number" placeholder="Angle" id="pointer-angle" required>
+                <input type="color" value="#000000" id="pointer-color" required>
+                <button id="add-pointer-cancel" onclick="hideAddMenu()">Cancel</button>
             </div>
-        </div>
-        <div class="dropdown">
-            <button class="dropdown-button">Extras</button>
-            <div class="dropdown-content">
-                <button onclick="centerOnContent()">Center on content</button>
-                <button onclick="toggleTheme()">Toogle theme</button>
-                <button onclick="clearAll(true)">Remove all</button>
+            <div id="add-text">
+                <input type="text" placeholder="Text" id="text-value" required>
+                <input type="color" value="#000000" id="text-color" required>
+                <input type="number" id="text-size" value="20" required>
+                <button id="add-text-cancel" onclick="hideAddMenu()">Cancel</button>
             </div>
-        </div>
-        <div class="dropdown">
-            <button class="dropdown-button">Help</button>
-            <div class="dropdown-content">
-                <button onclick="checkForUpdates()">Check for updates</button>
-                <button onclick="openGithubPage()">Open GitHub page</button>
-                <button onclick="newBugOrFeature()">Report a bug or request a feature</button>
-                <button onclick="emailContact()">E-Mail contact</button>
-            </div>
-        </div>
-        <input type="text" value="New Document" id="documentName" required>
-        <button onclick="addPointer()">Add pointer</button>
-        <button onclick="addText()">Add text</button>
-        <button onclick="showList()">Show element list</button>
-        <div id="list-container">
-            <div id="list-container-header"><button onclick="hideList()" id="hide-list">x</button></div>
-            <ul id="sortable-list"></ul>
         </div>
     </div>
 

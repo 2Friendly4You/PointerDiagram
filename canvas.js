@@ -30,6 +30,15 @@ function draw() {
     }
   }
 
+  // Draw object that is being added
+  if (addingObject != null) {
+    if (addingObject instanceof Pointer) {
+      drawPointer(addingObject);
+    } else if (addingObject instanceof Text) {
+      drawText(addingObject);
+    }
+  }
+
   requestAnimationFrame(draw);
 }
 
@@ -65,11 +74,14 @@ function drawPointer(pointer) {
   // an arrow is a line with a triangle at the end
   // convert from degrees to radians
   angle = (angle * Math.PI) / 180;
-  
+
   // draw the line in the direction of the angle and the length and the width and the color
   ctx.beginPath();
   ctx.moveTo(x, y);
-  ctx.lineTo(x + (length - 1) * Math.cos(angle), y + (length - 1) * -Math.sin(angle));
+  ctx.lineTo(
+    x + (length - 1) * Math.cos(angle),
+    y + (length - 1) * -Math.sin(angle)
+  );
   ctx.strokeStyle = color;
   ctx.lineWidth = lineWidth;
   ctx.stroke();
@@ -100,15 +112,33 @@ function onPointerDown(e) {
 }
 
 function onPointerUp(e) {
+  e.preventDefault();
+
   isDragging = false;
   initialPinchDistance = null;
   lastZoom = cameraZoom;
+
+  if (addingObject != null && e.button == 0) {
+    listToDraw.push(addingObject);
+    addingObject = null;
+    hideAddMenu();
+  }
 }
 
 function onPointerMove(e) {
   if (isDragging) {
     cameraOffset.x = getEventLocation(e).x / cameraZoom - dragStart.x;
     cameraOffset.y = getEventLocation(e).y / cameraZoom - dragStart.y;
+  }
+
+  if (addingObject != null) {
+    let eventLocation = getEventLocation(e);
+    addingObject.x =
+      (eventLocation.x - canvas.width / 2) / cameraZoom +
+      (canvas.width / 2 - cameraOffset.x);
+    addingObject.y =
+      (eventLocation.y - canvas.height / 2) / cameraZoom +
+      (canvas.height / 2 - cameraOffset.y);
   }
 }
 
@@ -157,6 +187,7 @@ function setZoom(zoom) {
   cameraZoom = zoom;
 }
 
+document.addEventListener('contextmenu', event => event.preventDefault());
 canvas.addEventListener("mousedown", onPointerDown);
 canvas.addEventListener("touchstart", (e) => handleTouch(e, onPointerDown));
 canvas.addEventListener("mouseup", onPointerUp);

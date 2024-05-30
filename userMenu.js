@@ -1,8 +1,10 @@
+let addingObject = null;
+
 // Main functions for canvas manipulation and export
 function centerOnContent() {
   const firstElement = listToDraw.length > 0 ? listToDraw[0] : { x: 0, y: 0 };
-  cameraOffset.x = firstElement.x + canvas.width / 2;
-  cameraOffset.y = firstElement.y + canvas.height / 2;
+  cameraOffset.x = -firstElement.x + canvas.width / 2;
+  cameraOffset.y = -firstElement.y + canvas.height / 2;
   cameraZoom = 1;
 }
 
@@ -19,13 +21,45 @@ function exportAsImage(type) {
 
 // Object management functions
 function addPointer() {
-  listToDraw.push(new Pointer(0, 0, 140, 0, "red", 1));
-  updateListAndDraw();
+  if (addingObject != null) {
+    alert("You can only add one element at a time.");
+    return;
+  }
+
+  // show add-pointer menu
+  document.getElementById("add-pointer").style.display = "flex";
+  // show general add menu
+  document.getElementById("add-menu").style.display = "block";
+
+  addingObject = new Pointer(
+    0,
+    0,
+    document.getElementById("pointer-length").value,
+    document.getElementById("pointer-angle").value,
+    document.getElementById("pointer-color").value,
+    1
+  );
 }
 
 function addText() {
-  listToDraw.push(new Text(20, 20, "Hello World", 20, "red", "Arial"));
-  updateListAndDraw();
+  if (addingObject != null) {
+    alert("You can only add one element at a time.");
+    return;
+  }
+
+  // show add-text menu
+  document.getElementById("add-text").style.display = "flex";
+  // show general add menu
+  document.getElementById("add-menu").style.display = "block";
+
+  addingObject = new Text(
+    0,
+    0,
+    document.getElementById("text-value").value,
+    document.getElementById("text-size").value,
+    document.getElementById("text-color").value,
+    "Arial"
+  );
 }
 
 function clearAll(userConfirmed = false) {
@@ -227,6 +261,15 @@ function showList() {
   }px`;
 }
 
+function hideAddMenu() {
+  document.getElementById("add-menu").style.display = "none";
+  // hide all add-pointer and add-text
+  document.getElementById("add-pointer").style.display = "none";
+  document.getElementById("add-text").style.display = "none";
+
+  addingObject = null;
+}
+
 function checkForUpdates() {
   // get version from meta tag
   let version = document.querySelector('meta[name="version"]').content;
@@ -262,16 +305,64 @@ function openGithubPage() {
 
 function newBugOrFeature() {
   window.open(
-    "https://github.com/2Friendly4You/PointerDiagram/issues/new/choose",
+    "https://github.com/2Friendly4You/PointerDiagram/issues/new",
     "_blank"
   );
 }
 
-function emailContact(){
+function emailContact() {
   window.open("mailto:pointerdiagram@tobiasrick.de");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   setupEventListeners();
   dragElement(document.getElementById("list-container"));
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    hideAddMenu();
+  }
+});
+
+document.getElementById("pointer-length").addEventListener("input", (event) => {
+  const length = event.target.value;
+  if (addingObject instanceof Pointer && addingObject != null) {
+    addingObject.length = length;
+  }
+});
+
+document.getElementById("pointer-angle").addEventListener("input", (event) => {
+  const angle = event.target.value;
+  if (addingObject instanceof Pointer && addingObject != null) {
+    addingObject.angle = angle;
+  }
+});
+
+document.getElementById("pointer-color").addEventListener("input", (event) => {
+  const color = event.target.value;
+  if (addingObject instanceof Pointer && addingObject != null) {
+    addingObject.color = color;
+  }
+});
+
+document.getElementById("text-value").addEventListener("input", (event) => {
+  const text = event.target.value;
+  if (addingObject instanceof Text && addingObject != null) {
+    addingObject.text = text;
+  }
+});
+
+document.getElementById("text-size").addEventListener("input", (event) => {
+  const size = event.target.value;
+  if (addingObject instanceof Text && addingObject != null) {
+    addingObject.size = size;
+  }
+});
+
+document.getElementById("text-color").addEventListener("input", (event) => {
+  const color = event.target.value;
+  if (addingObject instanceof Text && addingObject != null) {
+    addingObject.color = color;
+  }
 });
