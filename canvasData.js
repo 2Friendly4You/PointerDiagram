@@ -33,3 +33,17 @@ function Text(x, y, text, size, color, font) {
     this.id = Math.round(Math.random() * 100000);
   }
 }
+
+function Circle(x, y, radius, color) {
+  this.x = x;
+  this.y = y;
+  this.radius = radius;
+  this.color = color;
+  // generate unique id
+  this.id = Math.round(Math.random() * 100000);
+  // check if the the id is already used
+  // if it is, generate a new one
+  while (listToDraw.find((item) => item.id == this.id)) {
+    this.id = Math.round(Math.random() * 100000);
+  }
+}

@@ -70,6 +70,9 @@ function clearAll(userConfirmed = false) {
 }
 
 function newDocument() {
+  if (!confirm("Are you sure you want to create a new document?")) {
+    return;
+  }
   document.getElementById("documentName").value = "New Document";
   clearAll(false);
 }
@@ -129,6 +132,24 @@ function loadDataFromFile() {
     };
   };
   input.click();
+}
+
+function pointerChoosePoint(){
+  if (listToDraw.length <= 0) {
+    alert("You need to add at least one element to choose a point.");
+    return;
+  }
+  choosePoint = true;
+  connectPoints = false;
+}
+
+function pointerConnect(){
+  if (listToDraw.length <= 0) {
+    alert("You need to add at least one element to connect two points.");
+    return;
+  }
+  connectPoints = true;
+  choosePoint = false;
 }
 
 // UI interaction functions
@@ -269,6 +290,10 @@ function hideAddMenu() {
   document.getElementById("add-text").style.display = "none";
 
   addingObject = null;
+  nearestMarker = null;
+  choosePoint = false;
+  connectPoints = false;
+  connectPointLocation = null;
 }
 
 function checkForUpdates() {
