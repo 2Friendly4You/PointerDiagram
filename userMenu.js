@@ -93,7 +93,8 @@ function saveDataToFile() {
 function loadDataFromFile() {
   const input = document.createElement("input");
   input.type = "file";
-  input.accept = ".pd";
+  // accept .pd and .txt files
+  input.accept = ".pd, .txt";
   input.onchange = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
