@@ -290,7 +290,7 @@ function checkForUpdates() {
             "\nYou can download it from the releases page on GitHub if you run it locally or contact your administrator."
         );
       } else {
-        alert("You are using the latest version.");
+        alert("You are using the latest version: " + version + "\nNo updates available.");
       }
     })
     .catch((error) => {
