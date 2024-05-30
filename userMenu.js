@@ -1,4 +1,5 @@
 let addingObject = null;
+let contextObject = null;
 
 // Main functions for canvas manipulation and export
 function centerOnContent() {
@@ -159,7 +160,7 @@ function addItemToList(element) {
   newItem.setAttribute("data-id", element.id);
 
   newItem.innerHTML = `
-    <input value="Element ${element.id}" size="8">
+    <input value="${element.id}" size="8">
     <button class="move-btn move-up-btn">⏫</button>
     <button class="move-btn move-down-btn">⏬</button>
     <button class="delete-btn">Delete</button>
@@ -294,6 +295,54 @@ function hideAddMenu() {
   choosePoint = false;
   connectPoints = false;
   connectPointLocation = null;
+}
+
+function contextDelete() {
+  if (contextObject != null) {
+    listToDraw = listToDraw.filter((item) => item.id != contextObject.id);
+    updateListAndDraw();
+  }
+  hideContextMenu();
+}
+
+function contextFront() {
+  if (contextObject != null) {
+    listToDraw = listToDraw.filter((item) => item.id != contextObject.id);
+    listToDraw.push(contextObject);
+    updateListAndDraw();
+  }
+  hideContextMenu();
+}
+
+function contextBack() {
+  if (contextObject != null) {
+    listToDraw = listToDraw.filter((item) => item.id != contextObject.id);
+    listToDraw.unshift(contextObject);
+    updateListAndDraw();
+  }
+  hideContextMenu();
+}
+
+function showContextMenu(x, y, object) {
+  let contextMenu = document.getElementById("context-menu");
+  contextMenu.style.display = "flex";
+  contextMenu.style.left = x + "px";
+  contextMenu.style.top = y + "px";
+  contextObject = object;
+
+  // if the menu would be outside of the window, move it inside
+  if (contextMenu.getBoundingClientRect().right > window.innerWidth) {
+    contextMenu.style.left = window.innerWidth - contextMenu.offsetWidth + "px";
+  }
+  if (contextMenu.getBoundingClientRect().bottom > window.innerHeight) {
+    contextMenu.style.top = window.innerHeight - contextMenu.offsetHeight + "px";
+  }
+}
+
+function hideContextMenu() {
+  let contextMenu = document.getElementById("context-menu");
+  contextMenu.style.display = "none";
+  contextObject = null;
 }
 
 function checkForUpdates() {

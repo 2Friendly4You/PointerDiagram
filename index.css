@@ -37,6 +37,18 @@ body {
     left: 0px;
 }
 
+#context-menu {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    background: var(--secondary);
+    color: var(--text);
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    user-select: none;
+}
+
 #controls {
     padding: 10px;
     background: var(--secondary);
