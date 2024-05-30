@@ -135,7 +135,7 @@ function loadDataFromFile() {
   input.click();
 }
 
-function pointerChoosePoint(){
+function pointerChoosePoint() {
   if (listToDraw.length <= 0) {
     alert("You need to add at least one element to choose a point.");
     return;
@@ -144,7 +144,7 @@ function pointerChoosePoint(){
   connectPoints = false;
 }
 
-function pointerConnect(){
+function pointerConnect() {
   if (listToDraw.length <= 0) {
     alert("You need to add at least one element to connect two points.");
     return;
@@ -335,7 +335,8 @@ function showContextMenu(x, y, object) {
     contextMenu.style.left = window.innerWidth - contextMenu.offsetWidth + "px";
   }
   if (contextMenu.getBoundingClientRect().bottom > window.innerHeight) {
-    contextMenu.style.top = window.innerHeight - contextMenu.offsetHeight + "px";
+    contextMenu.style.top =
+      window.innerHeight - contextMenu.offsetHeight + "px";
   }
 }
 
@@ -362,10 +363,17 @@ function checkForUpdates() {
         alert(
           "There is a new version available: " +
             latest +
-            "\nYou can download it from the releases page on GitHub if you run it locally or contact your administrator."
+            "\n" +
+            "You are currently using: " +
+            version +
+            "\nYou can download it from the releases page on GitHub if you run it locally or contact your administrator to update the site."
         );
       } else {
-        alert("You are using the latest version: " + version + "\nNo updates available.");
+        alert(
+          "You are using the latest version: " +
+            version +
+            "\nNo updates available."
+        );
       }
     })
     .catch((error) => {
