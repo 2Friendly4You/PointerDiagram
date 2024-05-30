@@ -139,20 +139,38 @@ function onPointerUp(e) {
   initialPinchDistance = null;
   lastZoom = cameraZoom;
 
+  hideContextMenu();
+
   if (addingObject != null && e.button == 0) {
     // If the user is adding a pointer, they can choose a point to connect to
     if (nearestMarker != null && choosePoint) {
       addingObject.x = nearestMarker.x;
       addingObject.y = nearestMarker.y;
-    // If the user is connecting two points, they can choose two points to connect to
+      // If the user is connecting two points, they can choose two points to connect to
     } else if (nearestMarker != null && connectPoints) {
       if (connectPointLocation == null) {
         connectPointLocation = { x: nearestMarker.x, y: nearestMarker.y };
         return;
       } else {
-        let lengthBetweenPoints = Math.sqrt((connectPointLocation.x - nearestMarker.x) ** 2 + (connectPointLocation.y - nearestMarker.y) ** 2);
-        let angleBetweenPoints = -Math.atan2(nearestMarker.y - connectPointLocation.y, nearestMarker.x - connectPointLocation.x) * 180 / Math.PI;
-        let pointer = new Pointer(connectPointLocation.x, connectPointLocation.y, lengthBetweenPoints, angleBetweenPoints, addingObject.color, 1);
+        let lengthBetweenPoints = Math.sqrt(
+          (connectPointLocation.x - nearestMarker.x) ** 2 +
+            (connectPointLocation.y - nearestMarker.y) ** 2
+        );
+        let angleBetweenPoints =
+          (-Math.atan2(
+            nearestMarker.y - connectPointLocation.y,
+            nearestMarker.x - connectPointLocation.x
+          ) *
+            180) /
+          Math.PI;
+        let pointer = new Pointer(
+          connectPointLocation.x,
+          connectPointLocation.y,
+          lengthBetweenPoints,
+          angleBetweenPoints,
+          addingObject.color,
+          1
+        );
         listToDraw.push(pointer);
         hideAddMenu();
         return;
@@ -173,20 +191,43 @@ function onPointerMove(e) {
   // If an object is being added, update its position
   if (addingObject != null) {
     let eventLocation = getEventLocation(e);
-    addingObject.x = mouseLocationToCanvasLocation(eventLocation.x, eventLocation.y).x;
-    addingObject.y = mouseLocationToCanvasLocation(eventLocation.x, eventLocation.y).y;
+    addingObject.x = mouseLocationToCanvasLocation(
+      eventLocation.x,
+      eventLocation.y
+    ).x;
+    addingObject.y = mouseLocationToCanvasLocation(
+      eventLocation.x,
+      eventLocation.y
+    ).y;
   }
 
   if (choosePoint || connectPoints) {
-    nearestMarkerPoint = getNearestEnd({ x: mouseLocationToCanvasLocation(getEventLocation(e).x, getEventLocation(e).y).x, y: mouseLocationToCanvasLocation(getEventLocation(e).x, getEventLocation(e).y).y});
-    nearestMarker = new Circle(nearestMarkerPoint.x, nearestMarkerPoint.y, 5, addingObject.color);
+    nearestMarkerPoint = getNearestEnd({
+      x: mouseLocationToCanvasLocation(
+        getEventLocation(e).x,
+        getEventLocation(e).y
+      ).x,
+      y: mouseLocationToCanvasLocation(
+        getEventLocation(e).x,
+        getEventLocation(e).y
+      ).y,
+    });
+    nearestMarker = new Circle(
+      nearestMarkerPoint.x,
+      nearestMarkerPoint.y,
+      5,
+      addingObject.color
+    );
   }
 }
 
 function mouseLocationToCanvasLocation(x, y) {
   return {
-    x: (x - canvas.width / 2) / cameraZoom + (canvas.width / 2 - cameraOffset.x),
-    y: (y - canvas.height / 2) / cameraZoom + (canvas.height / 2 - cameraOffset.y),
+    x:
+      (x - canvas.width / 2) / cameraZoom + (canvas.width / 2 - cameraOffset.x),
+    y:
+      (y - canvas.height / 2) / cameraZoom +
+      (canvas.height / 2 - cameraOffset.y),
   };
 }
 
@@ -266,26 +307,103 @@ function setZoom(zoom) {
 function getNearestElement(object) {
   let nearest = null;
   let nearestDistance = Infinity;
+
   for (let i = 0; i < listToDraw.length; i++) {
     let item = listToDraw[i];
-    let distance = Math.sqrt(
-      (object.x - item.x) ** 2 + (object.y - item.y) ** 2
-    );
+    let distance;
+
+    if (item instanceof Pointer) {
+      distance = getDistanceToPointer(object, item);
+    } else if (item instanceof Text) {
+      distance = getDistanceToText(object, item);
+    } else {
+      distance = Math.sqrt((object.x - item.x) ** 2 + (object.y - item.y) ** 2);
+    }
+
     if (distance < nearestDistance) {
       nearest = item;
       nearestDistance = distance;
     }
   }
+
+  if (nearestDistance > 5) {
+    return null;
+  }
+
   return nearest;
 }
 
-function onRightClick(e){
+function getDistanceToPointer(object, pointer) {
+  let x1 = pointer.x;
+  let y1 = pointer.y;
+  let x2 =
+    pointer.x + pointer.length * Math.cos((pointer.angle * Math.PI) / 180);
+  let y2 =
+    pointer.y + pointer.length * Math.sin((-pointer.angle * Math.PI) / 180);
+
+  let objectX = object.x;
+  let objectY = object.y;
+
+  // Calculate the projection of the object point onto the line segment
+  let A = objectX - x1;
+  let B = objectY - y1;
+  let C = x2 - x1;
+  let D = y2 - y1;
+
+  let dot = A * C + B * D;
+  let len_sq = C * C + D * D;
+  let param = -1;
+
+  if (len_sq != 0) {
+    // to avoid division by zero
+    param = dot / len_sq;
+  }
+
+  let nearestX, nearestY;
+
+  if (param < 0) {
+    nearestX = x1;
+    nearestY = y1;
+  } else if (param > 1) {
+    nearestX = x2;
+    nearestY = y2;
+  } else {
+    nearestX = x1 + param * C;
+    nearestY = y1 + param * D;
+  }
+
+  // Calculate the distance to the nearest point
+  let distance = Math.sqrt(
+    (objectX - nearestX) ** 2 + (objectY - nearestY) ** 2
+  );
+
+  return distance;
+}
+
+function getDistanceToText(object, text) {
+  let x = text.x;
+  let y = text.y;
+  let width = ctx.measureText(text.text).width;
+  let height = parseInt(ctx.font, 10); // Assuming font size is in pixels
+
+  let dx = Math.max(x - object.x, 0, object.x - (x + width));
+  let dy = Math.max(y - object.y, 0, object.y - (y + height));
+
+  return Math.sqrt(dx * dx + dy * dy);
+}
+
+function onRightClick(e) {
   e.preventDefault();
   // get the closest element to the mouse
-  let nearest = getNearestElement({ x: mouseLocationToCanvasLocation(e.clientX, e.clientY).x, y: mouseLocationToCanvasLocation(e.clientX, e.clientY).y });
-  // highlight the closest element
-  if (nearest instanceof Pointer) {
-    nearest.color = "red";
+  let nearest = getNearestElement({
+    x: mouseLocationToCanvasLocation(e.clientX, e.clientY).x,
+    y: mouseLocationToCanvasLocation(e.clientX, e.clientY).y,
+  });
+
+  if (nearest != null) {
+    showContextMenu(e.clientX, e.clientY, nearest);
+  } else {
+    hideContextMenu();
   }
 }
 
