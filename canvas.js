@@ -7,6 +7,13 @@ let MAX_ZOOM = 100;
 let MIN_ZOOM = 0.01;
 let SCROLL_SENSITIVITY = 0.005;
 
+let nearestMarker = null;
+
+let choosePoint = false;
+
+let connectPoints = false;
+let connectPointLocation = null;
+
 function draw() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -37,6 +44,10 @@ function draw() {
     } else if (addingObject instanceof Text) {
       drawText(addingObject);
     }
+  }
+
+  if (nearestMarker != null) {
+    drawCircle(nearestMarker);
   }
 
   requestAnimationFrame(draw);
@@ -102,6 +113,18 @@ function drawPointer(pointer) {
   ctx.fill();
 }
 
+function drawCircle(circle) {
+  let x = circle.x;
+  let y = circle.y;
+  let radius = circle.radius;
+  let color = circle.color;
+
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, 2 * Math.PI);
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+
 let isDragging = false;
 let dragStart = { x: 0, y: 0 };
 
@@ -112,15 +135,31 @@ function onPointerDown(e) {
 }
 
 function onPointerUp(e) {
-  e.preventDefault();
-
   isDragging = false;
   initialPinchDistance = null;
   lastZoom = cameraZoom;
 
   if (addingObject != null && e.button == 0) {
+    // If the user is adding a pointer, they can choose a point to connect to
+    if (nearestMarker != null && choosePoint) {
+      addingObject.x = nearestMarker.x;
+      addingObject.y = nearestMarker.y;
+    // If the user is connecting two points, they can choose two points to connect to
+    } else if (nearestMarker != null && connectPoints) {
+      if (connectPointLocation == null) {
+        connectPointLocation = { x: nearestMarker.x, y: nearestMarker.y };
+        return;
+      } else {
+        let lengthBetweenPoints = Math.sqrt((connectPointLocation.x - nearestMarker.x) ** 2 + (connectPointLocation.y - nearestMarker.y) ** 2);
+        let angleBetweenPoints = -Math.atan2(nearestMarker.y - connectPointLocation.y, nearestMarker.x - connectPointLocation.x) * 180 / Math.PI;
+        let pointer = new Pointer(connectPointLocation.x, connectPointLocation.y, lengthBetweenPoints, angleBetweenPoints, addingObject.color, 1);
+        listToDraw.push(pointer);
+        hideAddMenu();
+        return;
+      }
+    }
+
     listToDraw.push(addingObject);
-    addingObject = null;
     hideAddMenu();
   }
 }
@@ -131,15 +170,52 @@ function onPointerMove(e) {
     cameraOffset.y = getEventLocation(e).y / cameraZoom - dragStart.y;
   }
 
+  // If an object is being added, update its position
   if (addingObject != null) {
     let eventLocation = getEventLocation(e);
-    addingObject.x =
-      (eventLocation.x - canvas.width / 2) / cameraZoom +
-      (canvas.width / 2 - cameraOffset.x);
-    addingObject.y =
-      (eventLocation.y - canvas.height / 2) / cameraZoom +
-      (canvas.height / 2 - cameraOffset.y);
+    addingObject.x = mouseLocationToCanvasLocation(eventLocation.x, eventLocation.y).x;
+    addingObject.y = mouseLocationToCanvasLocation(eventLocation.x, eventLocation.y).y;
   }
+
+  if (choosePoint || connectPoints) {
+    nearestMarkerPoint = getNearestEnd({ x: mouseLocationToCanvasLocation(getEventLocation(e).x, getEventLocation(e).y).x, y: mouseLocationToCanvasLocation(getEventLocation(e).x, getEventLocation(e).y).y});
+    nearestMarker = new Circle(nearestMarkerPoint.x, nearestMarkerPoint.y, 5, addingObject.color);
+  }
+}
+
+function mouseLocationToCanvasLocation(x, y) {
+  return {
+    x: (x - canvas.width / 2) / cameraZoom + (canvas.width / 2 - cameraOffset.x),
+    y: (y - canvas.height / 2) / cameraZoom + (canvas.height / 2 - cameraOffset.y),
+  };
+}
+
+function getNearestEnd(object) {
+  let nearest = null;
+  let nearestDistance = Infinity;
+  let listOfPointers = listToDraw.filter((item) => item instanceof Pointer);
+  // add the points to the list of points
+  let listOfPoints = [];
+  for (let i = 0; i < listOfPointers.length; i++) {
+    let pointer = listOfPointers[i];
+    listOfPoints.push({ x: pointer.x, y: pointer.y });
+    listOfPoints.push({
+      x: pointer.x + pointer.length * Math.cos((pointer.angle * Math.PI) / 180),
+      y: pointer.y - pointer.length * Math.sin((pointer.angle * Math.PI) / 180),
+    });
+  }
+  // check the distance to each point
+  for (let i = 0; i < listOfPoints.length; i++) {
+    let point = listOfPoints[i];
+    let distance = Math.sqrt(
+      (object.x - point.x) ** 2 + (object.y - point.y) ** 2
+    );
+    if (distance < nearestDistance) {
+      nearest = point;
+      nearestDistance = distance;
+    }
+  }
+  return nearest;
 }
 
 function handleTouch(e, singleTouchHandler) {
@@ -187,7 +263,33 @@ function setZoom(zoom) {
   cameraZoom = zoom;
 }
 
-document.addEventListener('contextmenu', event => event.preventDefault());
+function getNearestElement(object) {
+  let nearest = null;
+  let nearestDistance = Infinity;
+  for (let i = 0; i < listToDraw.length; i++) {
+    let item = listToDraw[i];
+    let distance = Math.sqrt(
+      (object.x - item.x) ** 2 + (object.y - item.y) ** 2
+    );
+    if (distance < nearestDistance) {
+      nearest = item;
+      nearestDistance = distance;
+    }
+  }
+  return nearest;
+}
+
+function onRightClick(e){
+  e.preventDefault();
+  // get the closest element to the mouse
+  let nearest = getNearestElement({ x: mouseLocationToCanvasLocation(e.clientX, e.clientY).x, y: mouseLocationToCanvasLocation(e.clientX, e.clientY).y });
+  // highlight the closest element
+  if (nearest instanceof Pointer) {
+    nearest.color = "red";
+  }
+}
+
+document.addEventListener("contextmenu", (e) => onRightClick(e));
 canvas.addEventListener("mousedown", onPointerDown);
 canvas.addEventListener("touchstart", (e) => handleTouch(e, onPointerDown));
 canvas.addEventListener("mouseup", onPointerUp);
