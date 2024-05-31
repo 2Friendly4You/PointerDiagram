@@ -421,7 +421,6 @@ function checkForUpdates() {
   fetch("https://api.github.com/repos/2Friendly4You/PointerDiagram/releases")
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       let latest = data[0].tag_name;
       // delete everything except numbers and dots
       latest = latest.replace(/[^0-9.]/g, "");
@@ -536,8 +535,6 @@ hideAddMenu();
 
 // wait for the page to load
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("Page loaded");
-
   // load data from local storage
   let loadedList = localStorage.getItem("listToDraw");
   if (loadedList) {
