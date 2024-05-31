@@ -63,6 +63,35 @@ function addText() {
   );
 }
 
+function addAngle() {
+  if (addingObject != null) {
+    alert("You can only add one element at a time.");
+    return;
+  }
+  // if there are less than 2 pointers on the canvas, show an alert
+  if (listToDraw.filter((item) => item instanceof Pointer).length < 2) {
+    alert("You need to add at least two pointers to create an angle.");
+    return;
+  }
+
+  // show add-angle menu
+  document.getElementById("add-angle").style.display = "flex";
+  // show general add menu
+  document.getElementById("add-menu").style.display = "block";
+
+  addingObject = new Angle(
+    0,
+    0,
+    50,
+    document.getElementById("angle-color").value,
+    0,
+    0,
+    1
+  );
+
+  addAngleBetweenPointers = true;
+}
+
 function clearAll(userConfirmed = false) {
   if (!userConfirmed || confirm("Are you sure you want to clear the canvas?")) {
     listToDraw = [];
@@ -126,6 +155,19 @@ function loadDataFromFile() {
             data.font,
             data.id
           );
+        } else if (type === "Circle") {
+          return new Circle(data.x, data.y, data.radius, data.color, data.id);
+        } else if (type === "Angle") {
+          return new Angle(
+            data.x,
+            data.y,
+            data.radius,
+            data.color,
+            data.startAngle,
+            data.endAngle,
+            data.lineWidth,
+            data.id
+          );
         }
       });
       updateListAndDraw();
@@ -184,7 +226,12 @@ function setupEventListeners() {
   document
     .getElementById("documentName")
     .addEventListener("click", function () {
-      this.select();
+      // if nothing is selected, select the whole text and if it's already selected, deselect it
+      if (this.selectionStart == this.selectionEnd) {
+        this.setSelectionRange(0, this.value.length);
+      } else {
+        this.setSelectionRange(this.value.length, this.value.length);
+      }
     });
 
   const list = document.getElementById("sortable-list");
@@ -286,15 +333,21 @@ function showList() {
 
 function hideAddMenu() {
   document.getElementById("add-menu").style.display = "none";
-  // hide all add-pointer and add-text
+  // hide all submenus
   document.getElementById("add-pointer").style.display = "none";
   document.getElementById("add-text").style.display = "none";
+  document.getElementById("add-angle").style.display = "none";
+
+  // clear angle input
+  document.getElementById("angle-pointer1").value = "";
+  document.getElementById("angle-pointer2").value = "";
 
   addingObject = null;
   nearestMarker = null;
   choosePoint = false;
   connectPoints = false;
   connectPointLocation = null;
+  addAngleBetweenPointers = false;
 }
 
 function contextDelete() {
@@ -449,3 +502,12 @@ document.getElementById("text-color").addEventListener("input", (event) => {
     addingObject.color = color;
   }
 });
+
+document.getElementById("angle-color").addEventListener("input", (event) => {
+  const color = event.target.value;
+  if (addingObject instanceof Angle && addingObject != null) {
+    addingObject.color = color;
+  }
+});
+
+hideAddMenu();

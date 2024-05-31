@@ -47,3 +47,20 @@ function Circle(x, y, radius, color) {
     this.id = Math.round(Math.random() * 100000);
   }
 }
+
+function Angle(x, y, radius, color, startAngle, endAngle, lineWidth) {
+  this.x = x;
+  this.y = y;
+  this.radius = radius;
+  this.color = color;
+  this.startAngle = startAngle;
+  this.endAngle = endAngle;
+  this.lineWidth = lineWidth;
+  // generate unique id
+  this.id = Math.round(Math.random() * 100000);
+  // check if the the id is already used
+  // if it is, generate a new one
+  while (listToDraw.find((item) => item.id == this.id)) {
+    this.id = Math.round(Math.random() * 100000);
+  }
+}

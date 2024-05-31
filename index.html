@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="version" content="v1.1.1">
+    <meta name="version" content="v1.2.0">
     <title>Pointer Diagram</title>
 
     <link rel="stylesheet" href="index.css">
@@ -39,6 +39,7 @@
                 <button class="dropdown-button">Extras</button>
                 <div class="dropdown-content">
                     <button onclick="centerOnContent()">Center on content</button>
+                    <button onclick="showList()">Show element list</button>
                     <button onclick="toggleTheme()">Toogle theme</button>
                     <button onclick="clearAll(true)">Remove all</button>
                 </div>
@@ -55,7 +56,7 @@
             <input type="text" value="New Document" id="documentName" required>
             <button onclick="addPointer()">Add pointer</button>
             <button onclick="addText()">Add text</button>
-            <button onclick="showList()">Show element list</button>
+            <button onclick="addAngle()">Add angle</button>
             <div id="list-container">
                 <div id="list-container-header"><button onclick="hideList()" id="hide-list">x</button></div>
                 <ul id="sortable-list"></ul>
@@ -76,6 +77,12 @@
                 <input type="color" value="#000000" id="text-color" required>
                 <input type="number" id="text-size" value="20" required>
                 <button id="add-text-cancel" onclick="hideAddMenu()">Cancel</button>
+            </div>
+            <div id="add-angle">
+                <input type="text" placeholder="Pointer 1" id="angle-pointer1" disabled>
+                <input type="text" placeholder="Pointer 2" id="angle-pointer2" disabled>
+                <input type="color" id="angle-color" required>
+                <button id="add-angle-cancel" onclick="hideAddMenu()">Cancel</button>
             </div>
         </div>
     </div>

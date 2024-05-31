@@ -152,7 +152,7 @@ button {
 
 #list-container {
     height: 300px;
-    width: 280px;
+    width: 300px;
     background: var(--background);
     color: var(--text);
     padding: 10px;
