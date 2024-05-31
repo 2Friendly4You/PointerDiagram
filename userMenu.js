@@ -226,7 +226,12 @@ function setupEventListeners() {
   document
     .getElementById("documentName")
     .addEventListener("click", function () {
-      this.select();
+      // if nothing is selected, select the whole text and if it's already selected, deselect it
+      if (this.selectionStart == this.selectionEnd) {
+        this.setSelectionRange(0, this.value.length);
+      } else {
+        this.setSelectionRange(this.value.length, this.value.length);
+      }
     });
 
   const list = document.getElementById("sortable-list");
