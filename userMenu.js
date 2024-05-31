@@ -109,11 +109,7 @@ function newDocument() {
 
 // File management functions
 function saveDataToFile() {
-  const listWithTypes = listToDraw.map((item) => ({
-    type: item.constructor.name,
-    data: item,
-  }));
-  const data = JSON.stringify(listWithTypes);
+  const data = dataToString();
   const blob = new Blob([data], { type: "text/plain" });
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -121,6 +117,14 @@ function saveDataToFile() {
   a.href = url;
   a.download = `${documentName}.pd`;
   a.click();
+}
+
+function dataToString() {
+  const listWithTypes = listToDraw.map((item) => ({
+    type: item.constructor.name,
+    data: item,
+  }));
+  return JSON.stringify(listWithTypes);
 }
 
 function loadDataFromFile() {
@@ -133,49 +137,56 @@ function loadDataFromFile() {
     const reader = new FileReader();
     reader.readAsText(file, "UTF-8");
     reader.onload = (readerEvent) => {
-      const listWithTypes = JSON.parse(readerEvent.target.result);
-      listToDraw = listWithTypes.map(({ type, data }) => {
-        if (type === "Pointer") {
-          return new Pointer(
-            data.x,
-            data.y,
-            data.length,
-            data.angle,
-            data.color,
-            data.lineWidth,
-            data.id
-          );
-        } else if (type === "Text") {
-          return new Text(
-            data.x,
-            data.y,
-            data.text,
-            data.size,
-            data.color,
-            data.font,
-            data.id
-          );
-        } else if (type === "Circle") {
-          return new Circle(data.x, data.y, data.radius, data.color, data.id);
-        } else if (type === "Angle") {
-          return new Angle(
-            data.x,
-            data.y,
-            data.radius,
-            data.color,
-            data.startAngle,
-            data.endAngle,
-            data.lineWidth,
-            data.id
-          );
-        }
-      });
-      updateListAndDraw();
+      const content = readerEvent.target.result;
+      dataFromString(content);
       document.getElementById("documentName").value = file.name.slice(0, -3);
     };
   };
   input.click();
 }
+
+function dataFromString(data) {
+  const listWithTypes = JSON.parse(data);
+
+  listToDraw = listWithTypes.map(({ type, data }) => {
+    if (type === "Pointer") {
+      return new Pointer(
+        data.x,
+        data.y,
+        data.length,
+        data.angle,
+        data.color,
+        data.lineWidth,
+        data.id
+      );
+    } else if (type === "Text") {
+      return new Text(
+        data.x,
+        data.y,
+        data.text,
+        data.size,
+        data.color,
+        data.font,
+        data.id
+      );
+    } else if (type === "Circle") {
+      return new Circle(data.x, data.y, data.radius, data.color, data.id);
+    } else if (type === "Angle") {
+      return new Angle(
+        data.x,
+        data.y,
+        data.radius,
+        data.color,
+        data.startAngle,
+        data.endAngle,
+        data.lineWidth,
+        data.id
+      );
+    }
+  });
+  updateListAndDraw();
+}
+
 
 function pointerChoosePoint() {
   if (listToDraw.length <= 0) {
@@ -452,6 +463,15 @@ function emailContact() {
   window.open("mailto:pointerdiagram@tobiasrick.de");
 }
 
+window.addEventListener("beforeunload", function (event) {
+  // save data to local storage
+  localStorage.setItem("listToDraw", dataToString());
+  localStorage.setItem(
+    "documentName",
+    document.getElementById("documentName").value
+  );
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   setupEventListeners();
   dragElement(document.getElementById("list-container"));
@@ -513,3 +533,19 @@ document.getElementById("angle-color").addEventListener("input", (event) => {
 });
 
 hideAddMenu();
+
+// wait for the page to load
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Page loaded");
+
+  // load data from local storage
+  let loadedList = localStorage.getItem("listToDraw");
+  if (loadedList) {
+    dataFromString(loadedList);
+  }
+
+  let loadedDocumentName = localStorage.getItem("documentName");
+  if (loadedDocumentName) {
+    document.getElementById("documentName").value = loadedDocumentName;
+  }
+});
