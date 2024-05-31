@@ -362,15 +362,11 @@ function onPointerMove(e) {
 
     // check if the pointer looks towards the intersection or away from it and flip the angle if needed
     if (towardsPoint(pointer1, intersection)) {
-      console.log("pointer1 looks towards intersection");
       pointer1Angle += 180;
-      console.log(pointer1Angle);
     }
 
     if (towardsPoint(pointer2, intersection)) {
-      console.log("pointer2 looks towards intersection");
       pointer2Angle += 180;
-      console.log(pointer2Angle);
     }
 
     // Normalize pointer angles
@@ -427,8 +423,6 @@ function towardsPoint(pointer, point) {
   y2 = Math.round(y2 * 10000) / 10000;
   x3 = Math.round(x3 * 10000) / 10000;
   y3 = Math.round(y3 * 10000) / 10000;
-
-  console.log(x1, y1, x2, y2, x3, y3);
 
   // if the pointer is on the point return false
   if (x1 == x3 && y1 == y3) {
@@ -669,6 +663,15 @@ function getDistanceToSemicircle(object, semicircle) {
   let angleToObject = Math.atan2(dy, dx);
   if (angleToObject < 0) angleToObject += 2 * Math.PI;
 
+  angleToObject = 2 * Math.PI - angleToObject;
+
+  // Adjust angleToObject to be in the range [0, 2 * Math.PI]
+  angleToObject = angleToObject % (2 * Math.PI);
+
+  // Convert start and end angles to range [0, 2 * Math.PI]
+  startAngle = startAngle % (2 * Math.PI);
+  endAngle = endAngle % (2 * Math.PI);
+
   let isWithinAngleRange =
     (startAngle < endAngle &&
       angleToObject >= startAngle &&
@@ -676,9 +679,7 @@ function getDistanceToSemicircle(object, semicircle) {
     (startAngle > endAngle &&
       (angleToObject >= startAngle || angleToObject <= endAngle));
 
-  if (isWithinAngleRange) {
-    return Math.abs(distanceToCenter - radius); // Distance to the arc of the semicircle
-  }
+  isWithinAngleRange = !isWithinAngleRange;
 
   // Calculate the shortest distance to the endpoints of the semicircle
   let startX = cx + radius * Math.cos(startAngle);
@@ -693,6 +694,11 @@ function getDistanceToSemicircle(object, semicircle) {
     (object.x - endX) ** 2 + (object.y - endY) ** 2
   );
 
+  if (isWithinAngleRange) {
+    return Math.abs(distanceToCenter - radius); // Distance to the arc of the semicircle
+  }
+
+  // If not within the angle range, return the minimum distance to the endpoints
   return Math.min(distanceToStart, distanceToEnd);
 }
 
