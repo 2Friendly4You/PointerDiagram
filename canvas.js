@@ -56,11 +56,40 @@ function draw() {
     }
   }
 
+  // Highlight the contextObjects
+  if (contextObject.length > 0) {
+    let localContextObject = contextObject.map((item) => cloneObject(item));
+
+    for (let i = 0; i < localContextObject.length; i++) {
+      let item = localContextObject[i];
+      if (item instanceof Pointer) {
+        item.lineWidth = 3;
+        drawHighlightPointer(item);
+      } else if (item instanceof Text) {
+        // make it gray
+        item.color = "#808080";
+        drawText(item);
+      } else if (item instanceof Angle) {
+        item.lineWidth = 3;
+        drawAngle(item);
+      }
+    }
+  }
+
   if (nearestMarker != null) {
     drawCircle(nearestMarker);
   }
 
   requestAnimationFrame(draw);
+}
+
+// clones with the same prototype
+function cloneObject(obj) {
+  if (obj instanceof Pointer || obj instanceof Text || obj instanceof Angle) {
+    return Object.assign(Object.create(Object.getPrototypeOf(obj)), obj);
+  } else {
+    return structuredClone(obj); // deep clone
+  }
 }
 
 // Gets the relevant location from a mouse or single touch event
@@ -92,31 +121,68 @@ function drawPointer(pointer) {
   let color = pointer.color;
   let lineWidth = pointer.lineWidth;
 
-  // an arrow is a line with a triangle at the end
-  // convert from degrees to radians
+  // Convert angle from degrees to radians
   angle = (angle * Math.PI) / 180;
 
-  // draw the line in the direction of the angle and the length and the width and the color
+  // Draw the line
   ctx.beginPath();
   ctx.moveTo(x, y);
   ctx.lineTo(
-    x + (length - 1) * Math.cos(angle),
-    y + (length - 1) * -Math.sin(angle)
+    x + (length - 3) * Math.cos(angle),
+    y + (length - 3) * -Math.sin(angle)
   );
   ctx.strokeStyle = color;
   ctx.lineWidth = lineWidth;
   ctx.stroke();
 
-  // draw the triangle at the end of the line
+  // Draw the arrowhead
   ctx.beginPath();
   ctx.moveTo(x + length * Math.cos(angle), y + length * -Math.sin(angle));
   ctx.lineTo(
-    x + length * Math.cos(angle) - 10 * Math.cos(angle - 0.5),
-    y + length * -Math.sin(angle) - 10 * -Math.sin(angle - 0.5)
+    x + length * Math.cos(angle) - 10 * Math.cos(angle - 0.2),
+    y + length * -Math.sin(angle) - 10 * -Math.sin(angle - 0.2)
   );
   ctx.lineTo(
-    x + length * Math.cos(angle) - 10 * Math.cos(angle + 0.5),
-    y + length * -Math.sin(angle) - 10 * -Math.sin(angle + 0.5)
+    x + length * Math.cos(angle) - 10 * Math.cos(angle + 0.2),
+    y + length * -Math.sin(angle) - 10 * -Math.sin(angle + 0.2)
+  );
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+
+function drawHighlightPointer(pointer) {
+  let x = pointer.x;
+  let y = pointer.y;
+  let length = pointer.length;
+  let angle = pointer.angle;
+  let color = pointer.color;
+  let lineWidth = pointer.lineWidth;
+
+  // Convert angle from degrees to radians
+  angle = (angle * Math.PI) / 180;
+
+  // Draw the line
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(
+    x + (length - 8) * Math.cos(angle),
+    y + (length - 8) * -Math.sin(angle)
+  );
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lineWidth;
+  ctx.stroke();
+
+  // Draw the arrowhead
+  ctx.beginPath();
+  ctx.moveTo(x + length * Math.cos(angle), y + length * -Math.sin(angle));
+  ctx.lineTo(
+    x + length * Math.cos(angle) - 20 * Math.cos(angle - 0.2),
+    y + length * -Math.sin(angle) - 20 * -Math.sin(angle - 0.2)
+  );
+  ctx.lineTo(
+    x + length * Math.cos(angle) - 20 * Math.cos(angle + 0.2),
+    y + length * -Math.sin(angle) - 20 * -Math.sin(angle + 0.2)
   );
   ctx.closePath();
   ctx.fillStyle = color;
@@ -174,6 +240,11 @@ function onPointerUp(e) {
   isDragging = false;
   initialPinchDistance = null;
   lastZoom = cameraZoom;
+
+  // if the contextMenu is open don't clear the contextObject
+  if (document.getElementById("context-menu").style.display == "none") {
+    contextObject = [];
+  }
 
   hideContextMenu();
 
@@ -711,7 +782,15 @@ function onRightClick(e) {
   });
 
   if (nearest != null) {
-    showContextMenu(e.clientX, e.clientY, nearest);
+    // if strg is pressed, add the element to the contextObject without removing the previous ones
+    if (e.ctrlKey && contextObject != null) {
+      contextObject.push(nearest);
+    } else {
+      contextObject = [nearest];
+    }
+    // delete all null values from the contextObject
+    contextObject = contextObject.filter((item) => item != null);
+    showContextMenu(e.clientX, e.clientY);
   } else {
     hideContextMenu();
   }
