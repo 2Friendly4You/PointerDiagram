@@ -782,6 +782,18 @@ function onRightClick(e) {
   });
 
   if (nearest != null) {
+    document.getElementById("context-values").innerHTML = "";
+    // show important values of the element
+    if(nearest instanceof Pointer) {
+      // round to 4 decimal places
+      document.getElementById("context-values").innerHTML += `<p>Length: ${Math.round(nearest.length * 10000) / 10000} <br> Angle: ${Math.round(nearest.angle * 10000) / 10000}</p>`;
+    } else if (nearest instanceof Angle) {
+      // calculate the angle of the angle and round to 4 decimal places
+      let angle = Math.abs(nearest.startAngle - nearest.endAngle);
+      angle = Math.round(angle * 10000) / 10000;
+      document.getElementById("context-values").innerHTML += `<p>Angle: ${angle}</p>`;
+    }
+
     // if strg is pressed, add the element to the contextObject without removing the previous ones
     if (e.ctrlKey && contextObject != null) {
       contextObject.push(nearest);
