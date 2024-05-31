@@ -14,6 +14,8 @@ let choosePoint = false;
 let connectPoints = false;
 let connectPointLocation = null;
 
+let addAngleBetweenPointers = false;
+
 function draw() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
@@ -34,6 +36,10 @@ function draw() {
       drawPointer(item);
     } else if (item instanceof Text) {
       drawText(item);
+    } else if (item instanceof Angle) {
+      drawAngle(item);
+    } else if (item instanceof Circle) {
+      drawCircle(item);
     }
   }
 
@@ -43,6 +49,10 @@ function draw() {
       drawPointer(addingObject);
     } else if (addingObject instanceof Text) {
       drawText(addingObject);
+    } else if (addingObject instanceof Angle) {
+      drawAngle(addingObject);
+    } else if (addingObject instanceof Circle) {
+      drawCircle(addingObject);
     }
   }
 
@@ -125,6 +135,32 @@ function drawCircle(circle) {
   ctx.fill();
 }
 
+function drawAngle(angle) {
+  let x = angle.x;
+  let y = angle.y;
+  let radius = angle.radius;
+  let color = angle.color;
+  let startAngle = angle.startAngle;
+  let endAngle = angle.endAngle;
+  let lineWidth = angle.lineWidth;
+
+  // convert from degrees to radians
+  startAngle = (startAngle * Math.PI) / 180;
+  endAngle = (endAngle * Math.PI) / 180;
+
+  // the circle in the function goes the opposite way
+  // so we need to add 180 degrees to the start angle
+  // and subtract 180 degrees from the end angle
+  startAngle = Math.PI * 2 - startAngle;
+  endAngle = Math.PI * 2 - endAngle;
+
+  ctx.beginPath();
+  ctx.arc(x, y, radius, startAngle, endAngle);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lineWidth;
+  ctx.stroke();
+}
+
 let isDragging = false;
 let dragStart = { x: 0, y: 0 };
 
@@ -175,10 +211,59 @@ function onPointerUp(e) {
         hideAddMenu();
         return;
       }
+    } else if (addAngleBetweenPointers && addingObject != null) {
+      if (
+        document.getElementById("angle-pointer1").value != "" &&
+        document.getElementById("angle-pointer2").value != ""
+      ) {
+        addAngleBetweenPointers = false;
+        document.getElementById("angle-pointer1").value = "";
+        document.getElementById("angle-pointer2").value = "";
+
+        listToDraw.push(addingObject);
+        hideAddMenu();
+        updateList();
+        return;
+      }
+
+      // get nearest pointer to click
+      let nearestPointer = getNearestElement({
+        x: mouseLocationToCanvasLocation(e.clientX, e.clientY).x,
+        y: mouseLocationToCanvasLocation(e.clientX, e.clientY).y,
+      });
+
+      // if it is a pointer, add the id to the input field
+      if (nearestPointer instanceof Pointer) {
+        if (document.getElementById("angle-pointer1").value == "") {
+          document.getElementById("angle-pointer1").value = nearestPointer.id;
+          return;
+        } else if (
+          document.getElementById("angle-pointer2").value == "" &&
+          document.getElementById("angle-pointer1").value != nearestPointer.id
+        ) {
+          // check if the lines are parallel
+          let pointer1 = listToDraw.find(
+            (item) => item.id == document.getElementById("angle-pointer1").value
+          );
+          let pointer2 = nearestPointer;
+          if (getIntersectionPoint(pointer1, pointer2) == null) {
+            alert("Lines are parallel");
+            return;
+          }
+          document.getElementById("angle-pointer2").value = nearestPointer.id;
+          return;
+        } else {
+          return;
+        }
+      } else {
+        return;
+      }
     }
 
     listToDraw.push(addingObject);
     hideAddMenu();
+
+    updateList();
   }
 }
 
@@ -219,6 +304,124 @@ function onPointerMove(e) {
       addingObject.color
     );
   }
+
+  if (
+    document.getElementById("angle-pointer1").value != "" &&
+    document.getElementById("angle-pointer2").value != ""
+  ) {
+    // draw the angle between the two pointers
+    let pointer1 = listToDraw.find(
+      (item) => item.id == document.getElementById("angle-pointer1").value
+    );
+    let pointer2 = listToDraw.find(
+      (item) => item.id == document.getElementById("angle-pointer2").value
+    );
+
+    // get intersection point of the two lines
+    let intersection = getIntersectionPoint(pointer1, pointer2);
+
+    // get distance between the intersection and the mouse
+    let distance = Math.sqrt(
+      (intersection.x -
+        mouseLocationToCanvasLocation(e.clientX, e.clientY).x) **
+        2 +
+        (intersection.y -
+          mouseLocationToCanvasLocation(e.clientX, e.clientY).y) **
+          2
+    );
+
+    // Get the angle of the mouse from the intersection
+    // Right side is 0 degrees and it goes counterclockwise
+    let mouseLocation = mouseLocationToCanvasLocation(e.clientX, e.clientY);
+
+    let angleFromIntersection = Math.atan2(
+      mouseLocation.y - intersection.y,
+      mouseLocation.x - intersection.x
+    );
+
+    // Convert angle from radians to degrees
+    angleFromIntersection = (angleFromIntersection * 180) / Math.PI;
+
+    // Adjust the angle to be in the range [0, 360)
+    if (angleFromIntersection < 0) {
+      angleFromIntersection += 360;
+    }
+
+    angleFromIntersection = 360 - angleFromIntersection;
+
+    // Normalize pointer angles
+    let pointer1Angle = normalizeAngle(pointer1.angle);
+    let pointer2Angle = normalizeAngle(pointer2.angle);
+
+    // Check if the mouse is between the two pointers
+    if (
+      (pointer1Angle < pointer2Angle &&
+        angleFromIntersection > pointer1Angle &&
+        angleFromIntersection < pointer2Angle) ||
+      (pointer1Angle > pointer2Angle &&
+        (angleFromIntersection > pointer1Angle ||
+          angleFromIntersection < pointer2Angle))
+    ) {
+      // Set the angle between the two pointers
+      addingObject.startAngle = pointer2Angle;
+      addingObject.endAngle = pointer1Angle;
+    } else {
+      // Set the angle between the two pointers
+      addingObject.startAngle = pointer1Angle;
+      addingObject.endAngle = pointer2Angle;
+    }
+
+    // set it as the radius of the angle
+    addingObject.radius = distance;
+
+    // set the x and y of the angle
+    addingObject.x = intersection.x;
+    addingObject.y = intersection.y;
+
+    // set the color of the angle
+    addingObject.color = document.getElementById("angle-color").value;
+  }
+}
+
+// Normalize angle to be in the range [0, 360]
+function normalizeAngle(angle) {
+  let normalizedAngle = angle % 360;
+  if (normalizedAngle < 0) {
+    normalizedAngle += 360;
+  }
+  return normalizedAngle;
+}
+
+function getIntersectionPoint(pointer1, pointer2) {
+  let x1 = pointer1.x;
+  let y1 = pointer1.y;
+  let x2 =
+    pointer1.x + pointer1.length * Math.cos((pointer1.angle * Math.PI) / 180);
+  let y2 =
+    pointer1.y - pointer1.length * Math.sin((pointer1.angle * Math.PI) / 180);
+  let x3 = pointer2.x;
+  let y3 = pointer2.y;
+  let x4 =
+    pointer2.x + pointer2.length * Math.cos((pointer2.angle * Math.PI) / 180);
+  let y4 =
+    pointer2.y - pointer2.length * Math.sin((pointer2.angle * Math.PI) / 180);
+
+  let denominator = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+
+  // Use a small threshold to check for near-zero values
+  let epsilon = 1e-10;
+  if (Math.abs(denominator) < epsilon) {
+    return null;
+  }
+
+  let intersectionX =
+    ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) /
+    denominator;
+  let intersectionY =
+    ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) /
+    denominator;
+
+  return { x: intersectionX, y: intersectionY };
 }
 
 function mouseLocationToCanvasLocation(x, y) {
