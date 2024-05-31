@@ -1,5 +1,5 @@
 let addingObject = null;
-let contextObject = null;
+let contextObject = [];
 
 // Main functions for canvas manipulation and export
 function centerOnContent() {
@@ -351,37 +351,40 @@ function hideAddMenu() {
 }
 
 function contextDelete() {
-  if (contextObject != null) {
-    listToDraw = listToDraw.filter((item) => item.id != contextObject.id);
-    updateListAndDraw();
+  // Delete every object from the the list, that is in the contextObject
+  for (let i = 0; i < contextObject.length; i++) {
+    listToDraw = listToDraw.filter((item) => item.id != contextObject[i].id);
   }
+  contextObject = [];
+  updateListAndDraw();
   hideContextMenu();
 }
 
 function contextFront() {
-  if (contextObject != null) {
-    listToDraw = listToDraw.filter((item) => item.id != contextObject.id);
-    listToDraw.push(contextObject);
-    updateListAndDraw();
+  for (let i = 0; i < contextObject.length; i++) {
+    listToDraw = listToDraw.filter((item) => item.id != contextObject[i].id);
+    listToDraw.push(contextObject[i]);
   }
+  contextObject = [];
+  updateListAndDraw();
   hideContextMenu();
 }
 
 function contextBack() {
-  if (contextObject != null) {
-    listToDraw = listToDraw.filter((item) => item.id != contextObject.id);
-    listToDraw.unshift(contextObject);
-    updateListAndDraw();
+  for (let i = 0; i < contextObject.length; i++) {
+    listToDraw = listToDraw.filter((item) => item.id != contextObject[i].id);
+    listToDraw.unshift(contextObject[i]);
   }
+  contextObject = [];
+  updateListAndDraw();
   hideContextMenu();
 }
 
-function showContextMenu(x, y, object) {
+function showContextMenu(x, y) {
   let contextMenu = document.getElementById("context-menu");
   contextMenu.style.display = "flex";
   contextMenu.style.left = x + "px";
   contextMenu.style.top = y + "px";
-  contextObject = object;
 
   // if the menu would be outside of the window, move it inside
   if (contextMenu.getBoundingClientRect().right > window.innerWidth) {
@@ -396,7 +399,6 @@ function showContextMenu(x, y, object) {
 function hideContextMenu() {
   let contextMenu = document.getElementById("context-menu");
   contextMenu.style.display = "none";
-  contextObject = null;
 }
 
 function checkForUpdates() {
