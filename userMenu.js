@@ -85,7 +85,8 @@ function addAngle() {
     50,
     document.getElementById("angle-color").value,
     0,
-    0
+    0,
+    1
   );
 
   addAngleBetweenPointers = true;
@@ -164,6 +165,7 @@ function loadDataFromFile() {
             data.color,
             data.startAngle,
             data.endAngle,
+            data.lineWidth,
             data.id
           );
         }

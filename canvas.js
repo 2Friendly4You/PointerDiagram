@@ -353,7 +353,6 @@ function onPointerMove(e) {
 
     angleFromIntersection = 360 - angleFromIntersection;
 
-
     let pointer1Angle = parseFloat(pointer1.angle);
     let pointer2Angle = parseFloat(pointer2.angle);
 
@@ -420,6 +419,14 @@ function towardsPoint(pointer, point) {
 
   let x3 = point.x;
   let y3 = point.y;
+
+  // round to 4 decimal places
+  x1 = Math.round(x1 * 10000) / 10000;
+  y1 = Math.round(y1 * 10000) / 10000;
+  x2 = Math.round(x2 * 10000) / 10000;
+  y2 = Math.round(y2 * 10000) / 10000;
+  x3 = Math.round(x3 * 10000) / 10000;
+  y3 = Math.round(y3 * 10000) / 10000;
 
   console.log(x1, y1, x2, y2, x3, y3);
 
@@ -569,6 +576,8 @@ function getNearestElement(object) {
       distance = getDistanceToPointer(object, item);
     } else if (item instanceof Text) {
       distance = getDistanceToText(object, item);
+    } else if (item instanceof Angle) {
+      distance = getDistanceToSemicircle(object, item);
     } else {
       distance = Math.sqrt((object.x - item.x) ** 2 + (object.y - item.y) ** 2);
     }
@@ -643,6 +652,48 @@ function getDistanceToText(object, text) {
   let dy = Math.max(y - object.y, 0, object.y - (y + height));
 
   return Math.sqrt(dx * dx + dy * dy);
+}
+
+function getDistanceToSemicircle(object, semicircle) {
+  let cx = semicircle.x;
+  let cy = semicircle.y;
+  let radius = semicircle.radius;
+  let startAngle = (semicircle.startAngle * Math.PI) / 180;
+  let endAngle = (semicircle.endAngle * Math.PI) / 180;
+
+  let dx = object.x - cx;
+  let dy = object.y - cy;
+  let distanceToCenter = Math.sqrt(dx * dx + dy * dy);
+
+  // Check if the point is within the semicircle's angle range
+  let angleToObject = Math.atan2(dy, dx);
+  if (angleToObject < 0) angleToObject += 2 * Math.PI;
+
+  let isWithinAngleRange =
+    (startAngle < endAngle &&
+      angleToObject >= startAngle &&
+      angleToObject <= endAngle) ||
+    (startAngle > endAngle &&
+      (angleToObject >= startAngle || angleToObject <= endAngle));
+
+  if (isWithinAngleRange) {
+    return Math.abs(distanceToCenter - radius); // Distance to the arc of the semicircle
+  }
+
+  // Calculate the shortest distance to the endpoints of the semicircle
+  let startX = cx + radius * Math.cos(startAngle);
+  let startY = cy + radius * Math.sin(startAngle);
+  let endX = cx + radius * Math.cos(endAngle);
+  let endY = cy + radius * Math.sin(endAngle);
+
+  let distanceToStart = Math.sqrt(
+    (object.x - startX) ** 2 + (object.y - startY) ** 2
+  );
+  let distanceToEnd = Math.sqrt(
+    (object.x - endX) ** 2 + (object.y - endY) ** 2
+  );
+
+  return Math.min(distanceToStart, distanceToEnd);
 }
 
 function onRightClick(e) {
