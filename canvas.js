@@ -58,18 +58,16 @@ function draw() {
 
   // Highlight the contextObjects
   if (contextObject.length > 0) {
-    console.log(contextObject);
-
     let localContextObject = contextObject.map((item) => cloneObject(item));
-    console.log(localContextObject);
 
     for (let i = 0; i < localContextObject.length; i++) {
       let item = localContextObject[i];
       if (item instanceof Pointer) {
         item.lineWidth = 3;
-        drawPointer(item);
+        drawHighlightPointer(item);
       } else if (item instanceof Text) {
-        item.size += 1;
+        // make it gray
+        item.color = "#808080";
         drawText(item);
       } else if (item instanceof Angle) {
         item.lineWidth = 3;
@@ -153,6 +151,44 @@ function drawPointer(pointer) {
   ctx.fill();
 }
 
+function drawHighlightPointer(pointer) {
+  let x = pointer.x;
+  let y = pointer.y;
+  let length = pointer.length;
+  let angle = pointer.angle;
+  let color = pointer.color;
+  let lineWidth = pointer.lineWidth;
+
+  // Convert angle from degrees to radians
+  angle = (angle * Math.PI) / 180;
+
+  // Draw the line
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(
+    x + (length - 8) * Math.cos(angle),
+    y + (length - 8) * -Math.sin(angle)
+  );
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lineWidth;
+  ctx.stroke();
+
+  // Draw the arrowhead
+  ctx.beginPath();
+  ctx.moveTo(x + length * Math.cos(angle), y + length * -Math.sin(angle));
+  ctx.lineTo(
+    x + length * Math.cos(angle) - 20 * Math.cos(angle - 0.2),
+    y + length * -Math.sin(angle) - 20 * -Math.sin(angle - 0.2)
+  );
+  ctx.lineTo(
+    x + length * Math.cos(angle) - 20 * Math.cos(angle + 0.2),
+    y + length * -Math.sin(angle) - 20 * -Math.sin(angle + 0.2)
+  );
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+
 function drawCircle(circle) {
   let x = circle.x;
   let y = circle.y;
@@ -206,12 +242,11 @@ function onPointerUp(e) {
   lastZoom = cameraZoom;
 
   // if the contextMenu is open don't clear the contextObject
-  if (document.getElementById("context-menu").style.display == "none"){
+  if (document.getElementById("context-menu").style.display == "none") {
     contextObject = [];
   }
 
   hideContextMenu();
-
 
   if (addingObject != null && e.button == 0) {
     // If the user is adding a pointer, they can choose a point to connect to
@@ -755,7 +790,6 @@ function onRightClick(e) {
     }
     // delete all null values from the contextObject
     contextObject = contextObject.filter((item) => item != null);
-    console.log(contextObject);
     showContextMenu(e.clientX, e.clientY);
   } else {
     hideContextMenu();
