@@ -331,6 +331,16 @@ function onPointerUp(e) {
       }
     }
 
+    // if one of the inputs is empty, add a zero
+    if (addingObject instanceof Pointer) {
+      if (addingObject.length == "") {
+        addingObject.length = "0";
+      }
+      if (addingObject.angle == "") {
+        addingObject.angle = "0";
+      }
+    }
+
     listToDraw.push(addingObject);
     hideAddMenu();
 
