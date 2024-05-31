@@ -317,6 +317,10 @@ function onPointerMove(e) {
       (item) => item.id == document.getElementById("angle-pointer2").value
     );
 
+    // make a copy of the object pointer1 and pointer2
+    pointer1 = { ...pointer1 };
+    pointer2 = { ...pointer2 };
+
     // get intersection point of the two lines
     let intersection = getIntersectionPoint(pointer1, pointer2);
 
@@ -349,9 +353,30 @@ function onPointerMove(e) {
 
     angleFromIntersection = 360 - angleFromIntersection;
 
+
+    let pointer1Angle = parseFloat(pointer1.angle);
+    let pointer2Angle = parseFloat(pointer2.angle);
+
+    // round to 4 decimal places
+    pointer1Angle = Math.round(pointer1Angle * 10000) / 10000;
+    pointer2Angle = Math.round(pointer2Angle * 10000) / 10000;
+
+    // check if the pointer looks towards the intersection or away from it and flip the angle if needed
+    if (towardsPoint(pointer1, intersection)) {
+      console.log("pointer1 looks towards intersection");
+      pointer1Angle += 180;
+      console.log(pointer1Angle);
+    }
+
+    if (towardsPoint(pointer2, intersection)) {
+      console.log("pointer2 looks towards intersection");
+      pointer2Angle += 180;
+      console.log(pointer2Angle);
+    }
+
     // Normalize pointer angles
-    let pointer1Angle = normalizeAngle(pointer1.angle);
-    let pointer2Angle = normalizeAngle(pointer2.angle);
+    pointer1Angle = normalizeAngle(pointer1Angle);
+    pointer2Angle = normalizeAngle(pointer2Angle);
 
     // Check if the mouse is between the two pointers
     if (
@@ -381,6 +406,31 @@ function onPointerMove(e) {
     // set the color of the angle
     addingObject.color = document.getElementById("angle-color").value;
   }
+}
+
+// checks if the pointer looks towards a point or away from it
+// returns a boolean
+function towardsPoint(pointer, point) {
+  let x1 = pointer.x;
+  let y1 = pointer.y;
+  let x2 =
+    pointer.x + pointer.length * Math.cos((pointer.angle * Math.PI) / 180);
+  let y2 =
+    pointer.y - pointer.length * Math.sin((pointer.angle * Math.PI) / 180);
+
+  let x3 = point.x;
+  let y3 = point.y;
+
+  console.log(x1, y1, x2, y2, x3, y3);
+
+  // if the pointer is on the point return false
+  if (x1 == x3 && y1 == y3) {
+    return false;
+  }
+
+  let dotProduct = (x3 - x1) * (x2 - x1) + (y3 - y1) * (y2 - y1);
+
+  return dotProduct > 0;
 }
 
 // Normalize angle to be in the range [0, 360]
